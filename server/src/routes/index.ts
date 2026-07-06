@@ -1,0 +1,40 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes';
+import submissionRoutes from './submission.routes';
+import courseRoutes from './course.routes';
+import teacherRoutes from './teacher.routes';
+import lessonRoutes from './lesson.routes';
+import adminRoutes from './admin.routes';
+import storeRoutes from './store.routes';
+import gamificationRoutes from './gamification.routes';
+import competitionRoutes from './competition.routes';
+import communityRoutes from './community.routes';
+import paymentRoutes from './payment.routes';
+import subscriptionRoutes from './subscription.routes';
+import notificationRoutes from './notification.routes';
+import searchRoutes from './search.routes';
+import aiRoutes from './ai.routes';
+import messageRoutes from './message.routes';
+import parentRoutes from './parent.routes';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/ai', aiRoutes);
+router.use('/search', searchRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/submissions', submissionRoutes);
+router.use('/courses', courseRoutes);
+router.use('/teacher', teacherRoutes);
+router.use('/lessons', lessonRoutes);
+router.use('/admin', adminRoutes);
+router.use('/store', storeRoutes);
+router.use('/gamification', gamificationRoutes);
+router.use('/competitions', competitionRoutes);
+router.use('/community', communityRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/subscriptions', subscriptionRoutes);
+router.use('/messages', messageRoutes);
+router.use('/parent', parentRoutes);
+
+export default router;

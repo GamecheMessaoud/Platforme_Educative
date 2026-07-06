@@ -1,0 +1,3516 @@
+People’s Democratic Republic of Algeria
+Ministry of Higher Education and Scientific Research
+Abdelhamid Mehri University – Constantine 2
+Faculty of New Information and Communication Technologies
+Department of Software Technologies and Information Systems
+
+Master’s Thesis
+
+For the Degree of Master
+Option: Data Science and Intelligent Systems (SDSI)
+
+Sadeem
+A Bilingual RAG-Based Pedagogical Platform
+for Teaching Programming and Electronics to Algerian Children
+(Startup)
+
+Realized by:
+
+Supervised by:
+
+BAIBECHE Mohamed
+BOULANANE Alaa Eddine
+MESSOUAD Gamche
+
+Dr. BOUDOUDA Souheila
+Co-supervised by:
+Dr. SABBA Sara
+
+Academic Year 2025–2026
+
+Abstract
+Programming education has become essential in today’s digital world, but Algeria
+faces major challenges: language barriers, prohibitive training costs, the absence of
+locally adapted platforms, and the lack of personalised support. This thesis presents
+Sadeem, a bilingual gamified educational platform specifically designed for Algerian
+children aged 8 to 16.
+Our main contribution lies in the design and implementation of a RetrievalAugmented Generation (RAG) system that powers the intelligent pedagogical
+assistant Cody, capable of providing personalised assistance in Arabic and English.
+The platform offers a progressive learning path from visual programming (Blockly) to
+textual code (Python, C++, Arduino), with a complete gamification system including
+experience points, badges, levels and leaderboards.
+The platform delivers an innovative, accessible solution (1,500 DA/month), adapted
+to the Algerian context and filling the gaps of existing international platforms.
+Keywords: Digital education, Programming for children, RAG, Artificial Intelligence, Gamification, Bilingual platform, STEM, Algerian context.
+
+i
+
+Résumé
+L’éducation à la programmation est devenue essentielle dans le monde numérique actuel,
+mais l’Algérie fait face à des défis majeurs : barrière linguistique, coût prohibitif des
+formations, absence de plateformes locales adaptées et manque d’accompagnement personnalisé. Ce mémoire présente Sadeem, une plateforme éducative bilingue et gamifiée
+conçue spécifiquement pour les enfants algériens âgés de 8 à 16 ans.
+Notre contribution principale réside dans la conception et la mise en œuvre d’un
+système RAG (Retrieval-Augmented Generation) qui alimente l’assistant pédagogique intelligent Cody, capable de fournir une assistance personnalisée en arabe
+et en anglais. La plateforme propose un parcours d’apprentissage progressif allant de
+la programmation visuelle (Blockly) au code textuel (Python, C++, Arduino), avec
+un système de gamification complet incluant points d’expérience, badges, niveaux et
+classements.
+La plateforme constitue une solution innovante, accessible (1,500 DA/mois), adaptée au contexte algérien et comblant les lacunes des plateformes internationales existantes.
+Mots-clés : Éducation numérique, Programmation pour enfants, RAG, Intelligence Artificielle, Gamification, Plateforme bilingue, STEM, Contexte algérien.
+
+ii
+
+Dedication
+
+To our parents, for their love, patience, and sacrifices.
+
+To our families and friends, for their constant support.
+
+To Algerian children, the future engineers and innovators,
+for whom we designed this platform.
+
+To all who believe in digital education
+as a vehicle for the development of our country.
+
+— The Authors
+
+iii
+
+Acknowledgments
+We express our deepest gratitude to all those who contributed, directly or indirectly,
+to the completion of this work.
+Our most sincere thanks go first to our supervisor, Dr. BOUDOUDA Souheila,
+and our co-supervisor, Dr. SABBA Sara, for their availability, their invaluable
+advice, their patience, and their continuous support throughout this project. Their
+guidance and trust were instrumental in shaping this work.
+We also thank the members of the jury for the honour of evaluating this thesis;
+their time and critical perspective enrich both our work and our learning.
+Our gratitude extends to the entire teaching staff of the Department of Software Technologies and Information Systems (TLSI) at Abdelhamid Mehri
+University – Constantine 2, for the quality of training throughout our Master’s
+program in Data Science and Intelligent Systems.
+BAIBECHE Mohamed — I express my sincere thanks to my family for their unwavering support.
+BOULANANE Alaa Eddine — I am deeply grateful to my parents and friends for
+their encouragement.
+MESSOUAD Gamche — My heartfelt gratitude goes to my family for their patience
+and belief in me.
+We express our deepest recognition to our families for their unconditional support,
+their patience, and their constant encouragement throughout our studies. Without
+them, none of this would have been possible.
+Finally, we thank all those who contributed through a word, an idea, a code review,
+or a moment of help to the realisation of this work.
+
+iv
+
+List of Abbreviations
+Abbreviation
+
+Definition
+
+AI
+
+Artificial Intelligence
+
+API
+
+Application Programming Interface
+
+AR
+
+Augmented Reality
+
+ARPU
+
+Average Revenue Per User
+
+ASR
+
+Automatic Speech Recognition
+
+B2B
+
+Business-to-Business
+
+B2C
+
+Business-to-Consumer
+
+B2G
+
+Business-to-Government
+
+BEIR
+
+Benchmark for Information Retrieval
+
+BM25
+
+Best Matching 25 (sparse retrieval algorithm)
+
+CCP
+
+Compte Courant Postal (Algerian postal payment system)
+
+CAGR
+
+Compound Annual Growth Rate
+
+CJK
+
+Chinese, Japanese, Korean
+
+CORS
+
+Cross-Origin Resource Sharing
+
+CRUD
+
+Create, Read, Update, Delete
+
+CSS
+
+Cascading Style Sheets
+
+DA
+
+Algerian Dinar
+
+Docx
+
+Microsoft Word Document
+
+EdTech
+
+Educational Technology
+
+GB
+
+Gigabyte
+
+GPU
+
+Graphics Processing Unit
+
+HTML
+
+HyperText Markup Language
+
+HTTP
+
+HyperText Transfer Protocol
+
+IDE
+
+Integrated Development Environment
+v
+
+Abbreviation
+
+Definition
+
+IoT
+
+Internet of Things
+
+ITS
+
+Intelligent Tutoring System
+
+JSON
+
+JavaScript Object Notation
+
+JWT
+
+JSON Web Token
+
+K-12
+
+Kindergarten to 12th Grade
+
+LCEL
+
+LangChain Expression Language
+
+LLM
+
+Large Language Model
+
+LMS
+
+Learning Management System
+
+LOF
+
+List of Figures
+
+LOT
+
+List of Tables
+
+LUFS
+
+Loudness Units relative to Full Scale
+
+MMLU
+
+Massive Multitask Language Understanding
+
+MMR
+
+Maximal Marginal Relevance
+
+MS
+
+Microsoft
+
+nDCG
+
+Normalized Discounted Cumulative Gain
+
+NIM
+
+NVIDIA Inference Microservices
+
+NLP
+
+Natural Language Processing
+
+npm
+
+Node Package Manager
+
+OCR
+
+Optical Character Recognition
+
+OOP
+
+Object-Oriented Programming
+
+ORM
+
+Object-Relational Mapping
+
+P95
+
+95th Percentile
+
+PDF
+
+Portable Document Format
+
+PWA
+
+Progressive Web App
+
+RAG
+
+Retrieval-Augmented Generation
+
+RAGAS
+
+RAG Assessment
+
+vi
+
+Abbreviation
+
+Definition
+
+RAM
+
+Random Access Memory
+
+REST
+
+Representational State Transfer
+
+RH
+
+Ressources Humaines (Human Resources)
+
+RRF
+
+Reciprocal Rank Fusion
+
+RTL
+
+Right-to-Left
+
+SAM
+
+Serviceable Addressable Market
+
+SDSI
+
+Data Science and Intelligent Systems (Master’s option)
+
+SPA
+
+Single Page Application
+
+SQL
+
+Structured Query Language
+
+SSD
+
+Solid State Drive
+
+SSE
+
+Server-Sent Events
+
+STEM
+
+Science, Technology, Engineering, Mathematics
+
+STT
+
+Speech-to-Text
+
+TAM
+
+Total Addressable Market
+
+TLSI
+
+Software Technologies and Information Systems (Department)
+
+TLS
+
+Transport Layer Security
+
+TOC
+
+Table of Contents
+
+TXT
+
+Text file
+
+UI
+
+User Interface
+
+URL
+
+Uniform Resource Locator
+
+USD
+
+United States Dollar
+
+UX
+
+User Experience
+
+VAD
+
+Voice Activity Detection
+
+VPS
+
+Virtual Private Server
+
+WAV
+
+Waveform Audio File Format
+
+WER
+
+Word Error Rate
+
+vii
+
+Abbreviation
+
+Definition
+
+Wi-Fi
+
+Wireless Fidelity
+
+XP
+
+Experience Points
+
+viii
+
+Contents
+Abstract
+
+i
+
+Résumé
+
+ii
+
+Dedication
+
+iii
+
+Acknowledgments
+
+iv
+
+List of Abbreviations
+
+v
+
+General Introduction
+
+1
+
+1 State of the Art and Analysis
+Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.1 Pedagogical and Educational Context . . . . . . . . . . . . . . . . . . .
+1.1.1 From Passive E-learning to Adaptive Learning . . . . . . . . . .
+1.1.2 Computational Thinking . . . . . . . . . . . . . . . . . . . . . .
+1.1.3 Gamification in Learning . . . . . . . . . . . . . . . . . . . . . .
+1.2 Technological Foundations . . . . . . . . . . . . . . . . . . . . . . . . .
+1.2.1 Natural Language Processing . . . . . . . . . . . . . . . . . . .
+1.2.2 Large Language Models . . . . . . . . . . . . . . . . . . . . . .
+1.2.3 Retrieval-Augmented Generation (RAG) . . . . . . . . . . . . .
+1.3 Related Works . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.1 Scratch . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.2 Code.org . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.3 Khan Academy . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.4 Codecademy . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.5 Tynker . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3.6 CodeCombat . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.4 Comparative Study and Synthesis . . . . . . . . . . . . . . . . . . . . .
+1.4.1 Comparative Table of Platforms . . . . . . . . . . . . . . . . . .
+1.4.2 Analysis of Identified Gaps . . . . . . . . . . . . . . . . . . . . .
+1.4.3 Positioning of Sadeem . . . . . . . . . . . . . . . . . . . . . . .
+Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+4
+4
+4
+4
+5
+5
+5
+5
+7
+8
+9
+9
+10
+10
+10
+10
+11
+11
+11
+11
+12
+12
+
+2 Solution Design
+2.1 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.1.1 Importance of Online Education . . . . . . . . . . . . . . . . . .
+
+13
+13
+13
+
+ix
+
+2.1.2 Limits of Existing Platforms for Algerian Children . . . . . . . .
+2.1.3 Contribution of Artificial Intelligence to Education . . . . . . .
+2.1.4 Project Objective . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.2 Global Architecture of the Proposed Platform . . . . . . . . . . . . . .
+2.2.1 Overview of the Pipeline . . . . . . . . . . . . . . . . . . . . . .
+2.2.2 Description of the Roles of Each Layer . . . . . . . . . . . . . .
+2.3 Global AI Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4 Voice Pipeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4.1 Input Capture and Audio Normalisation . . . . . . . . . . . . .
+2.4.2 Language Identification and Routing . . . . . . . . . . . . . . .
+2.4.3 Streaming Result and Child Confirmation . . . . . . . . . . . .
+2.5 Term Normalisation After Speech Recognition . . . . . . . . . . . . . .
+2.6 RAG Pipeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.6.1 Indexing Pipeline . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.6.2 Query Pipeline . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.7 Pedagogical Prompting and Answer Format . . . . . . . . . . . . . . .
+2.8 Session Memory . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.9 Evaluation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.10 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+14
+14
+14
+14
+14
+16
+17
+18
+18
+18
+19
+19
+20
+20
+20
+22
+23
+23
+24
+
+3 Implementation, Testing and Evaluation
+Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.1 Development Environment . . . . . . . . . . . . . . . . . . . . . . . . .
+3.2 Frontend and Backend Technologies . . . . . . . . . . . . . . . . . . . .
+3.2.1 Frontend Stack . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.2.2 Backend Stack . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3 AI Technologies and Libraries (Cody Pedagogical Module) . . . . . . .
+3.3.1 Orchestration and Serving . . . . . . . . . . . . . . . . . . . . .
+3.3.2 Text Generation and Retrieval . . . . . . . . . . . . . . . . . . .
+3.3.3 Image Generation: Pedagogical Diagram . . . . . . . . . . . . .
+3.3.4 Voice Input (Speech-to-Text) . . . . . . . . . . . . . . . . . . .
+3.3.5 Document Ingestion (PDF, DOCX, OCR) . . . . . . . . . . . .
+3.4 Deployment Architecture . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5 Website Interface and Cody in Action . . . . . . . . . . . . . . . . . . .
+3.5.1 Home Page . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.2 Student Dashboard . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.3 Lesson Page . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.4 Leaderboard . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.5 Interactive Laboratories . . . . . . . . . . . . . . . . . . . . . .
+
+25
+25
+25
+26
+26
+27
+27
+27
+28
+28
+28
+29
+29
+29
+31
+31
+32
+32
+33
+
+x
+
+3.5.6 STEM Store . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.5.7 Cody in Action — Three Interaction Examples . . . . . . . . .
+3.6 Testing and Evaluation . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.6.1 Unit, Integration and Performance Tests . . . . . . . . . . . . .
+3.6.2 RAG Quality Evaluation (RAGAS) . . . . . . . . . . . . . . . .
+3.6.3 Identified Limitations . . . . . . . . . . . . . . . . . . . . . . . .
+3.6.4 Comparison with Initial Objectives . . . . . . . . . . . . . . . .
+3.7 Model Selection and Rationale . . . . . . . . . . . . . . . . . . . . . . .
+Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+33
+34
+36
+36
+36
+38
+38
+38
+40
+
+General Conclusion
+
+41
+
+Bibliography
+
+44
+
+Business Model Canvas
+.1 Project Fact Sheet . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.2 Project Nature . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.3 Problems to Solve . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.4 Value Proposition . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.5 Customer Segments . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.5.1
+Detailed Profile – Primary Customer (B2C) . . . . . . . . . . .
+.6 Customer Relationships . . . . . . . . . . . . . . . . . . . . . . . . . .
+.7 Channels . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.8 Key Partners . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.9 Revenue Streams . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.9.1
+Revenue Projection – Year 1 . . . . . . . . . . . . . . . . . . . .
+.10 Visual Canvas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.10.1 Canvas Description . . . . . . . . . . . . . . . . . . . . . . . . .
+.10.2 Business Model Canvas – Visual . . . . . . . . . . . . . . . . . .
+.11 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+49
+50
+51
+52
+53
+54
+54
+55
+56
+57
+58
+58
+59
+59
+59
+60
+
+xi
+
+List of Figures
+1.1
+
+Gamification mechanics: five interconnected drivers of children’s motivation and perseverance. . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.2 Self-attention mechanism: each token attends to every other token with
+a learned weight; the formula at the bottom computes the weighted sum
+that produces the contextualised representation. . . . . . . . . . . . . .
+1.3 The RAG paradigm: combining the language model’s parametric knowledge with a non-parametric external knowledge base to produce grounded,
+up-to-date answers. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.1 Global four-layer architecture of Sadeem. . . . . . . . . . . . . . . . . .
+2.2 Global architecture of Cody inside the RAG_CHAT_BOT platform . .
+2.3 Voice-processing pipeline with mandatory transcript confirmation . . .
+2.4 Index construction for the hybrid dense and sparse knowledge base . .
+2.5 RAG query pipeline used by Cody to produce grounded answers . . . .
+3.1
+
+6
+
+7
+
+9
+15
+17
+19
+21
+22
+
+Deployment architecture — Docker Compose orchestration of five containerised services behind an Nginx reverse proxy. . . . . . . . . . . . . 30
+3.2 Home page of the Sadeem platform presenting learning paths, gamification features, and registration options. . . . . . . . . . . . . . . . . . . 31
+3.3 Student dashboard displaying XP balance, level progression, daily streaks,
+unlocked badges, and ongoing courses. . . . . . . . . . . . . . . . . . . 31
+3.4 Lesson page integrating video-based learning content, lesson notes, exercises, and direct access to the Cody pedagogical assistant. . . . . . . 32
+3.5 Leaderboard page displaying student rankings based on accumulated XP,
+with weekly and all-time competition views. . . . . . . . . . . . . . . . 32
+3.6 Interactive laboratory environment using PictoBlox for block-based programming and robotics learning. . . . . . . . . . . . . . . . . . . . . . . 33
+3.7 STEM store interface offering Arduino kits, sensors, and educational
+electronics with local payment and delivery options. . . . . . . . . . . . 33
+3.8 Cody answering an Arabic question about Python variables. The response includes a text explanation, a code block, and an automatically
+generated Mermaid diagram. . . . . . . . . . . . . . . . . . . . . . . . . 34
+3.9 Cody answering an Arabic question about Scratch programming blocks,
+with an explanation and a Mermaid diagram of the block execution cycle. 35
+3.10 Cody answering an Arabic question about if/else conditions in Python,
+with a code block and a decision-flow Mermaid diagram. . . . . . . . . 35
+
+xii
+
+3.11 RAGAS per-question results: question, Cody’s answer excerpt, number
+of retrieved contexts, and scores for faithfulness, answer relevancy, context precision, and context recall. . . . . . . . . . . . . . . . . . . . . .
+
+xiii
+
+37
+
+List of Tables
+1.1
+
+Comparison of existing platforms with Sadeem. . . . . . . . . . . . . .
+
+11
+
+Hardware and operating-system configuration. . . . . . . . . . . . . . .
+Development tools used. . . . . . . . . . . . . . . . . . . . . . . . . . .
+Docker services declared in docker-compose.yml. . . . . . . . . . . . .
+Performance test results — k6 load test (100 concurrent users). . . . .
+RAGAS evaluation summary — Cody RAG pipeline (15-question test
+set). . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.6 Set objectives vs. status at project completion. . . . . . . . . . . . . . .
+3.7 AI models used in the Cody pipeline — specifications and selection rationale. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+8
+Sadeem project fact sheet. . . . . . . . . . . . . . . . . . . . . . . . . .
+9
+Identified problems in Algerian digital education. . . . . . . . . . . . .
+10 Sadeem’s value propositions. . . . . . . . . . . . . . . . . . . . . . . . .
+11 Customer segments of Sadeem. . . . . . . . . . . . . . . . . . . . . . .
+12 Detailed profile of the primary B2C customer. . . . . . . . . . . . . . .
+13 Customer relationship strategy across the lifecycle. . . . . . . . . . . .
+14 Sadeem’s distribution and communication channels. . . . . . . . . . . .
+15 Estimated monthly costs of Sadeem. . . . . . . . . . . . . . . . . . . .
+16 Sadeem revenue model. . . . . . . . . . . . . . . . . . . . . . . . . . . .
+17 Year-1 revenue projection. . . . . . . . . . . . . . . . . . . . . . . . . .
+
+25
+26
+29
+36
+
+3.1
+3.2
+3.3
+3.4
+3.5
+
+xiv
+
+38
+39
+39
+50
+52
+53
+54
+54
+55
+56
+57
+58
+58
+
+General Introduction
+Context
+Programming education has become a fundamental pillar in the training of future
+generations in an increasingly digital world. It plays an essential role in developing
+21st-century skills, including critical thinking, problem-solving, creativity and collaboration [1]. In the past, learning programming was reserved for university students and
+IT professionals. Today, it is recognised as a fundamental skill that should be taught
+from an early age, on a par with reading, writing and mathematics [2].
+Algeria has a significant young population, with approximately 30% of its inhabitants under fifteen years old. This demographic reality represents both a challenge
+and an opportunity for technological education. However, despite the Algerian government’s efforts to promote digital education through several initiatives, the country
+still faces persistent obstacles that limit young learners’ access to quality educational
+resources in programming.
+
+Problem Statement
+Several major obstacles hinder the development of programming education in Algeria:
+• Language barrier. The majority of programming learning resources are available
+only in English or French, creating a real barrier for young Arabic-speaking learners.
+The rare Arabic resources often lack pedagogical quality and adequate technical
+support.
+• Absence of local platforms. No educational platform is designed specifically for
+the Algerian context, with local cultural examples and references. International
+platforms use culturally distant examples that do not resonate with Algerian children.
+• Prohibitive cost. Private programming courses cost between 5,000 and 15,000
+DA per month, making them inaccessible to many Algerian families. International
+platforms require payments in foreign currencies, further complicating access.
+• Geographic disparities. Training is primarily available in large cities such as
+Algiers, Constantine and Oran, excluding children from rural areas and small towns.
+• Lack of personalised support. Children learning alone via online resources lack
+assistance when they encounter difficulties. Qualified programming teachers are
+scarce and the student-to-teacher ratio remains very high.
+1
+
+General Introduction
+
+2
+
+• Lack of pedagogical continuity. Existing learning paths are fragmented, with
+no clear progression from visual programming to textual code, nor integration with
+electronics and robotics.
+Given these challenges, the central research question of our work is: How can we
+design and develop an educational platform that is accessible, culturally adapted, and
+technologically innovative in order to democratise programming education for Algerian
+children?
+
+Objectives
+To answer this question, our project Sadeem1 aims to develop an innovative educational platform meeting six complementary objectives:
+1. Linguistic accessibility: offer a bilingual interface (Arabic/English) with native
+RTL support, allowing Arabic-speaking children to learn in their mother tongue
+while developing English skills.
+2. Engagement through gamification: provide gamified learning inspired by successful platforms like Duolingo, integrating experience points (XP), badges, levels,
+leaderboards and streaks to maintain long-term motivation [3].
+3. Intelligent assistance: integrate an AI-based pedagogical assistant (Cody) using a Retrieval-Augmented Generation system [4] to provide personalised support,
+available continuously, capable of answering in Arabic and English.
+4. Progressive learning path: provide a structured path going from visual programming (Blockly/Scratch) to textual code (Python, C++), up to embedded electronics
+(Arduino).
+5. Financial accessibility: offer an economic model adapted to the Algerian context
+with an affordable monthly price (1,500 DA), integration of local payment methods
+(CCP, Chargily), and a STEM store for electronic kits.
+6. Pedagogical interactivity: offer interactive programming laboratories, simulators
+(Wokwi for Arduino), adaptive quizzes, and community spaces for project sharing.
+Sadeem is the Arabic word for “nebula”: a cloud of stars in which new stars are born. We
+chose this name as a metaphor for our platform, where young learners — the future stars of Algerian
+technology — begin to form.
+1
+
+General Introduction
+
+3
+
+Methodology
+Our development approach follows an iterative, user-centred methodology structured
+in four phases:
+1. Analysis: study of the Algerian educational context, comparative analysis of existing platforms, and definition of functional and technical specifications.
+2. Design: definition of the layered technical architecture, data model, bilingual RTL
+interface, and RAG pipeline design.
+3. Development: implementation of the frontend, backend services, relational database,
+and the RAG system with ChromaDB and NVIDIA NIM models.
+4. Testing and validation: unit and integration tests, RAGAS framework validation
+of the RAG pipeline, performance and load tests, and UX evaluation with a pilot
+group of Algerian children.
+
+Thesis Structure
+Chapter 1: State of the Art and Analysis lays the theoretical and analytical
+foundations. It presents the pedagogical context (e-learning evolution, computational
+thinking, STEM, gamification) and the technological foundations (NLP, LLMs, the
+RAG paradigm). It conducts a detailed comparative study of major platforms and
+synthesises the positioning of Sadeem.
+Chapter 2: Solution Design describes our main contribution: the global four-layer
+architecture of Sadeem and the detailed architecture of the Cody AI module. Each
+phase of the RAG pipeline is explained with its role, method, model, and parameters.
+Chapter 3: Implementation, Testing and Evaluation presents the concrete realisation: development environment, implementation of the five main modules, containerised deployment, four-level testing strategy with RAGAS evaluation, and experimental
+results with a pilot of Algerian children.
+A General Conclusion synthesises the work accomplished, answers the research
+question, discusses limitations, and proposes future perspectives.
+
+Chapter 1
+State of the Art and Analysis
+Introduction
+The teaching of programming, electronics and computational skills to children has
+become a strategic stake of contemporary education. This first chapter lays the theoretical and analytical foundations of our work. We begin by exploring the pedagogical
+context: the evolution of e-learning toward adaptive learning systems, computational
+thinking, STEM education, and the contribution of gamification to children’s motivation. We then present the technological foundations: NLP with its child-specific
+challenges, Large Language Models, and the RAG paradigm. We conclude with a critical review of related works and a comparative study that highlights the gaps relative
+to the Algerian context.
+
+1.1
+
+Pedagogical and Educational Context
+
+1.1.1
+
+From Passive E-learning to Adaptive Learning
+
+The first generation of e-learning relied on linear delivery of pre-recorded content
+(videos, PDFs, static quizzes) identical for all learners. Although this approach democratised access to knowledge, it suffered from a major weakness: the absence of personalisation, leading to high abandonment rates and limited knowledge retention [5].
+To overcome these limits, the field progressively evolved toward adaptive learning:
+a pedagogical approach in which content, difficulty, pace and feedback dynamically
+adjust to each learner’s profile. This evolution is materialised in Intelligent Tutoring
+Systems (ITS), which simulate the behaviour of a human tutor [6]. An ITS typically
+articulates four modules: the domain model, the learner model, the pedagogical model
+and the user interface.
+For children, personalisation is even more crucial. A child encountering repeated
+failure without contextual help quickly loses motivation. Conversely, an over-easy
+exercise produces boredom. The pedagogical challenge is to maintain the learner in
+their Zone of Proximal Development [7]: the space where the task is neither too easy
+nor too difficult with appropriate guidance.
+
+4
+
+Chapter 1. State of the Art and Analysis
+
+1.1.2
+
+5
+
+Computational Thinking
+
+Computational Thinking, formalised by Jeannette Wing in 2006 [1], is a set of
+problem-solving skills presented as a fundamental competency for everyone. It rests
+on four complementary pillars: decomposition, pattern recognition, abstraction,
+and algorithms. This approach finds its natural anchoring in STEM education [2],
+an interdisciplinary paradigm based on real-world applications.
+
+1.1.3
+
+Gamification in Learning
+
+Gamification is defined as the application of game elements and mechanics in nongame contexts to increase engagement and motivation [3]. In education, it has proven
+particularly effective for maintaining children’s interest [8]. Several theoretical frameworks support this effectiveness: Self-Determination Theory [9] (Deci & Ryan, 1985),
+which emphasises the three intrinsic needs of autonomy, competence and relatedness, and Flow Theory [10] (Csikszentmihalyi, 1990), which describes the state of
+optimal engagement when challenge matches the user’s skill level.
+The main gamification mechanics deployed in modern educational platforms are
+illustrated in Figure 1.1: experience points (XP) quantify progress and create a sense
+of accomplishment; levels provide short-term goals; badges act as visual prestige markers; leaderboards stimulate healthy competition; and streaks reward consistent daily
+practice.
+Empirical studies converge on showing positive impact: learner engagement can
+increase by up to 48%, course completion rates improve by approximately 36%, and
+knowledge retention increases by around 25% in gamified environments [8]. Beyond raw
+motivation, gamification fosters perseverance: by transforming failure into a learning
+opportunity, it normalises error — a fundamental posture in learning to program.
+
+1.2
+
+Technological Foundations
+
+1.2.1
+
+Natural Language Processing
+
+Natural Language Processing (NLP) is the subfield of AI dedicated to the automatic understanding, generation and manipulation of human language. It has gone
+through three major paradigms: rule-based (1950s–1980s), statistical (1990s–2010s),
+and neural (since the 2010s), based on the Transformer architecture [11].
+NLP plays a central role in building a pedagogical assistant for children. Two
+interaction modalities are particularly relevant:
+
+Chapter 1. State of the Art and Analysis
+
+6
+
+Figure 1.1: Gamification mechanics: five interconnected drivers of children’s motivation
+and perseverance.
+Text-based interaction. When a child types a question, the system must handle
+informal and imperfect input: simplified syntax, frequent spelling errors (especially at
+ages 8–12), mixed Arabic/English code-switching, and vague intentions. A robust NLP
+system must perform contextual understanding [12] across multiple turns, bridging
+lexical ambiguity, dialectal variation, and incomplete phrasing.
+Voice-based interaction. Voice input is particularly important for the youngest
+learners (ages 8–11) who type slowly. It also lowers the barrier for Arabic-speaking
+children who have not mastered the Arabic keyboard. Algerian children naturally mix
+Arabic and English in the same utterance, which generalist models such as Whisperlarge-v3 [13] partially handle but that specialised models such as Arabic-WhisperCodeSwitching [14] address more robustly.
+Designing responses tailored for children. Research in child-directed language [15]
+shows that effective communication with young learners requires simplified sentence
+structure, concrete analogies grounded in the child’s daily experience, a single concept
+per turn, and an explicit engagement question to keep the dialogue active. These
+principles directly shape the four-block answer format imposed on Cody’s generation
+prompt, described in Chapter 2.
+
+Chapter 1. State of the Art and Analysis
+
+7
+
+Understanding context written by children. Children often omit the subject,
+use pronouns referring to something mentioned several turns earlier, or write follow-ups
+without specifying the topic [16]. A robust system must reformulate such messages by
+combining them with the dialogue history before querying the retrieval engine — a
+technique known as query reformulation [17]. This is the first stage of Cody’s pipeline.
+
+1.2.2
+
+Large Language Models
+
+The Transformer architecture, introduced in 2017 by Vaswani et al. [11], profoundly
+transformed NLP by introducing the self-attention mechanism. Self-attention enables
+a model to weight, for each token, the importance of all other tokens in the sequence.
+The core formula is:
+QK ⊤
+V
+Attention(Q, K, V ) = softmax √
+dk
+!
+
+(1.1)
+
+where Q, K and V are the matrices of queries, keys and values, and dk is the key
+dimension. Figure 1.2 illustrates this mechanism: each token attends to every other
+token with a learned weight; the formula computes the weighted sum producing the
+contextualised representation.
+
+Figure 1.2: Self-attention mechanism: each token attends to every other token with a
+learned weight; the formula at the bottom computes the weighted sum that produces
+the contextualised representation.
+This parallelisable mechanism has enabled the training of Large Language Models (LLMs) with billions of parameters on web-scale corpora, opening capabilities directly exploitable in education [18]: adaptive explanation generation, conversational tu-
+
+Chapter 1. State of the Art and Analysis
+
+8
+
+toring, code generation and debugging, and multilingual handling. Several LLMs have
+established themselves as references: GPT-4 [19] (OpenAI), Gemini [20] (Google),
+Llama [21] (Meta), Gemma [22] (Google DeepMind) and Mistral [23].
+Despite their power, LLMs present critical limitations for educational use:
+• Hallucinations: generation of plausible but factually false information, particularly harmful when the user is a child unable to detect the error [24].
+• Curriculum ignorance: a generic LLM has no knowledge of the platform’s specific
+lesson content, and may give explanations inconsistent with what the child has just
+studied.
+• Safety risks: possibility of prompt-injection (jailbreaking) leading to content inappropriate for a young audience.
+• Knowledge cutoff: the model only knows information from its training data, with
+no automatic update.
+These limitations directly motivate the RAG architectural choice described in the
+following subsection.
+
+1.2.3
+
+Retrieval-Augmented Generation (RAG)
+
+Retrieval-Augmented Generation (RAG), introduced by Lewis et al. in 2020 [4],
+addresses the limitations of LLMs by augmenting generation with external, controlled
+knowledge stored in an indexed corpus. Figure 1.3 illustrates the paradigm: the language model’s parametric knowledge (encoded in its weights during training) is combined with a non-parametric external knowledge base (the platform’s lesson corpus),
+producing grounded, up-to-date answers.
+The RAG process operates in two phases:
+1. Retrieval: semantic search across a curated knowledge base extracts the passages
+most relevant to the user’s question.
+2. Augmented generation: a prompt combining the question and retrieved passages
+is sent to the LLM, which is instructed to answer strictly based on the provided
+context and to acknowledge when the answer is absent.
+The semantic search relies on vector embeddings [25], high-dimensional representations capturing text meaning. Similarity is measured by cosine similarity:
+CosineSim(A, B) =
+
+A·B
+∥A∥ × ∥B∥
+
+(1.2)
+
+Chapter 1. State of the Art and Analysis
+
+9
+
+Figure 1.3: The RAG paradigm: combining the language model’s parametric knowledge with a non-parametric external knowledge base to produce grounded, up-to-date
+answers.
+To improve coverage, modern RAG systems combine dense retrieval (vector-based)
+with sparse keyword retrieval (BM25 [26]), then merge the two ranked lists using
+Reciprocal Rank Fusion (RRF) [27]:
+RRF(d) =
+
+1
+r∈R k + r(d)
+X
+
+(1.3)
+
+where R is the set of rankings, r(d) is the rank of document d, and k = 60 is a smoothing
+constant.
+In our context, RAG enables Cody to: (i) answer precisely from official course
+content, (ii) drastically reduce hallucinations, (iii) stay curriculum-aligned, and (iv) be
+updated simply by enriching the corpus.
+
+1.3
+
+Related Works
+
+1.3.1
+
+Scratch
+
+Scratch [28], developed by the MIT Media Lab, is the most emblematic platform for
+children-oriented programming. Based on a visual block language, it enables children
+from age 8 to create animations, games and interactive stories.
+Strengths: intuitive interface; large active global community (more than 100 million projects); free and open-source; partial multilingual support.
+
+Chapter 1. State of the Art and Analysis
+
+10
+
+Limits: incomplete Arabic support with non-RTL interface; no pedagogical assistant; no gamification; no transition to textual code or electronics.
+
+1.3.2
+
+Code.org
+
+Code.org [29] offers free programming courses for K–12 levels, known for its Hour of
+Code initiative reaching more than 100 million students.
+Strengths: structured curriculum by age and level; certifications; partial Arabic
+translation; teacher analytics.
+Limits: oriented toward the American school system; machine-translated Arabic;
+no AI assistance; no hardware integration.
+
+1.3.3
+
+Khan Academy
+
+Khan Academy [30] offers free video courses on a wide range of subjects, including
+JavaScript programming, with interactive exercises and badges.
+Strengths: high-quality video content; immediate feedback; badge system; parent
+and teacher dashboards.
+Limits: no Arabic support for the programming section; no visual programming;
+no Algerian cultural adaptation; no conversational assistant.
+
+1.3.4
+
+Codecademy
+
+Codecademy [31] is a commercial platform with interactive courses in many programming languages and an integrated browser IDE.
+Strengths: powerful IDE; wide range of languages; real projects and portfolio
+building.
+Limits: no Arabic support; foreign currency pricing; primarily targets adolescents
+and adults.
+
+1.3.5
+
+Tynker
+
+Tynker [32] offers gamified programming courses for children, integrating Minecraft
+and partially supporting electronics.
+Strengths: strong gamification with narrative; Minecraft integration; structured
+age-based progression; partial Arduino support.
+Limits: no Arabic support; high USD pricing inaccessible in Algeria; no AI assistant.
+
+Chapter 1. State of the Art and Analysis
+
+1.3.6
+
+11
+
+CodeCombat
+
+CodeCombat [33] transforms programming learning into a role-playing game where
+players write code to control a character.
+Strengths: highly engaging gamification; Python and JavaScript support; French
+translation; multiplayer mode.
+Limits: no Arabic support; premium content in foreign currencies; no AI pedagogical assistant.
+
+1.4
+
+Comparative Study and Synthesis
+
+1.4.1
+
+Comparative Table of Platforms
+
+Table 1.1 synthesises the studied platforms and positions Sadeem against each criterion
+identified as critical for the Algerian context.
+Table 1.1: Comparison of existing platforms with Sadeem.
+Criterion
+
+Scratch
+
+Code.org
+
+Khan
+Ac.
+
+CodeCombat
+
+Sadeem
+
+Native Arabic /
+RTL
+
+No
+
+Partial
+
+No
+
+No
+
+No
+
+No
+
+Yes
+
+English interface
+
+Partial
+
+Yes
+
+Yes
+
+Yes
+
+Yes
+
+Yes
+
+Yes
+
+AI assistant
+
+No
+
+No
+
+No
+
+No
+
+No
+
+No
+
+Yes
+
+Arduino / IoT
+
+No
+
+No
+
+No
+
+No
+
+Partial
+
+No
+
+Yes
+
+Accessible price
+
+Free
+
+Free
+
+Free
+
+No
+
+No
+
+Partial
+
+Yes (1,500
+DA)
+
+Local adaptation
+
+No
+
+No
+
+No
+
+No
+
+No
+
+No
+
+Yes
+
+Full gamification
+
+No
+
+Weak
+
+Partial
+
+Yes
+
+Strong
+
+Strong
+
+Strong
+
+Visual + textual
++ electronics
+
+No
+
+Partial
+
+No
+
+No
+
+Partial
+
+No
+
+Yes
+
+1.4.2
+
+Codecademy
+Tynker
+
+Analysis of Identified Gaps
+
+The comparative analysis reveals six critical gaps: (i) no major platform offers full
+Arabic with a native RTL interface; (ii) content is culturally inappropriate for Algerian
+children; (iii) foreign-currency pricing creates financial barriers; (iv) learning paths are
+fragmented with no continuity from visual to textual to electronics; (v) no Arabicspeaking AI pedagogical assistant exists; (vi) there is no local ecosystem for payments,
+kits, or support in the Algerian dialect.
+
+Chapter 1. State of the Art and Analysis
+
+1.4.3
+
+12
+
+Positioning of Sadeem
+
+The analysis demonstrates the need for a local, bilingual, gamified and AI-assisted
+solution for Algerian children. Sadeem fills this gap by combining: a bilingual ArabicEnglish interface with native RTL support; an affordable subscription at 1,500 DA with
+CCP and Chargily payment methods; the AI assistant Cody based on RAG; a coherent learning path from Blockly to Python/C++ to Arduino; a complete gamification
+system; and a STEM store for Algeria-adapted electronic kits.
+
+Conclusion
+This first chapter has laid the theoretical and analytical foundations of our work. We
+presented the pedagogical context (adaptive learning, computational thinking, gamification), the technological foundations (NLP with its child-specific challenges for both
+text and voice, LLMs with their capabilities and limits, and RAG as the solution to
+those limits), and a detailed comparative study of the main existing platforms revealing
+six critical gaps. The following chapter presents the global technical architecture of
+Sadeem and details the AI pedagogical module Cody.
+
+Chapter 2
+Solution Design
+Introduction
+After establishing in the previous chapter the theoretical foundations and the limitations of existing platforms, this chapter is devoted to the design of the solution we
+propose: Sadeem, an educational platform dedicated to the teaching of programming
+and electronics to Algerian children, equipped with an intelligent bilingual pedagogical
+assistant named Cody.
+The chapter is organised in three parts. The first part presents the motivations
+that justify the project. The second part presents the global architecture of the platform, structured in four cooperating layers. The third part is devoted to our main
+contribution: the detailed architecture of the AI pedagogical module, the description
+of its inputs, the explanation of each phase of its processing, and the justification of the
+methodological and model choices that we made. It should be noted that this chapter
+focuses on the description, the roles, the methods and the models retained, without entering into low-level technical details. The concrete implementation, the development
+environment and the experimental results will be presented in the next chapter.
+
+2.1
+
+Motivation
+
+2.1.1
+
+Importance of Online Education
+
+Online education has become a major lever for democratising access to knowledge, particularly in countries where qualified human resources are unevenly distributed across
+the territory. For programming, which is a discipline learned by progressive practice,
+the online format offers three decisive advantages: continuous availability, the possibility of progressing at one’s own pace, and the sharing of pedagogical resources at
+minimal cost. In the Algerian context, where the geographical distribution of competent computer science teachers is unequal between large cities and inland regions, an
+online platform is a natural way to bridge this gap and to offer every child, whatever
+their wilaya, the same quality of educational content.
+
+13
+
+Chapter 2. Solution Design
+
+2.1.2
+
+14
+
+Limits of Existing Platforms for Algerian Children
+
+The comparative study carried out in Chapter 1 revealed that existing platforms, however successful internationally, do not meet the specific needs of Algerian children. None
+offers a truly native Arabic interface with right-to-left reading. None integrates payment methods accessible in Algerian dinars. The pedagogical content is built around
+foreign cultural references that reduce engagement. The learning paths are most often fragmented between visual programming, textual coding and electronics. Finally,
+none offers a conversational pedagogical assistant capable of helping the child in their
+language, at their level, and on the precise content of the lesson in progress. These
+weaknesses, taken together, leave a clear empty space that our project aims to fill.
+
+2.1.3
+
+Contribution of Artificial Intelligence to Education
+
+The recent progress of artificial intelligence, in particular generative language models,
+profoundly changes the possibilities of online education. Where the previous generation of platforms could only offer pre-recorded content identical for everyone, AI now
+makes it possible to build personalised companions, capable of reformulating an explanation, of proposing an adapted example, of detecting an error in reasoning, and of
+dialoguing patiently with the learner. For a child alone in front of their screen in the
+evening, this transforms the experience: instead of a static course consumed passively,
+learning becomes an interactive dialogue. This is exactly the role that we entrust to
+our pedagogical assistant Cody.
+
+2.1.4
+
+Project Objective
+
+Faced with these realities, we propose Sadeem, an educational platform designed for
+Algerian children aged 8 to 16, combining a bilingual interface (Arabic with native
+RTL support and English), a progressive learning path from visual block programming
+to textual coding to embedded electronics, a complete gamification system, and an
+intelligent pedagogical assistant Cody based on Retrieval-Augmented Generation.
+
+2.2
+
+Global Architecture of the Proposed Platform
+
+2.2.1
+
+Overview of the Pipeline
+
+To meet the objectives stated above, we have designed Sadeem as a system structured
+in four cooperating layers, illustrated in Figure 2.1. Each layer carries a clear and
+limited responsibility, which allows each component to evolve independently of the
+others.
+
+Chapter 2. Solution Design
+
+Figure 2.1: Global four-layer architecture of Sadeem.
+
+15
+
+Chapter 2. Solution Design
+
+16
+
+The four layers communicate vertically: a request coming from a child in Layer 1
+is received by the application services of Layer 2, which, if the request concerns the
+pedagogical assistant, routes it to the AI module of Layer 3; this module relies on the
+knowledge base of Layer 4 to produce a grounded answer, then returns it via Layer 2
+to the child’s screen.
+
+2.2.2
+
+Description of the Roles of Each Layer
+
+Layer 1 — Users Interface
+The first layer corresponds to the human actors: Students (aged 8 to 16, the central audience), Teachers (responsible for the pedagogical content), Administrators
+(overall functioning of the platform), and Parents (read-only access to their child’s
+progress). The role of this layer is not only to display interfaces, but to define the
+authorisation contract on which the entire rest of the architecture relies: every request
+that enters the upper layers is attached to a user and a role, and is filtered accordingly.
+Layer 2 — Application and Pedagogical Services
+The second layer is the operational heart of the platform. It hosts the user interfaces (lesson pages, visual block editor, textual code editor, electronics simulator,
+dashboards, gamification displays) and the services that make these interfaces alive:
+pedagogical content delivery, interactive learning environments (Blockly editor, code
+editor, Arduino simulator), progression and gamification (XP, levels, badges, streaks,
+leaderboards), access and security management, and economic services (subscriptions,
+CCP/Chargily payments, STEM store). This layer is also the one that calls the AI
+pedagogical module of Layer 3 whenever the child asks a question to Cody.
+Layer 3 — AI Pedagogical Module (Cody)
+The third layer is our main contribution. It contains the conversational pedagogical
+assistant Cody, capable of answering the questions of the child in Arabic or English,
+by relying on the actual content of the lessons. Its detailed architecture is presented
+in Section ??. Its role is to transform a free-text question into a useful, accurate and
+pedagogical answer, while keeping several guarantees: grounded in the official course
+content, adapted to the level of the child, expressed in their language, and — when the
+context is too weak — preferring an honest refusal rather than an invented answer.
+Layer 4 — Data and Infrastructure
+The fourth layer is the foundation that supports the three upper layers: storage of
+user data, lessons and transactions; storage of the pedagogical knowledge base used
+
+Chapter 2. Solution Design
+
+17
+
+by Cody; cache that accelerates the most frequent operations; deployment mechanism
+that allows the whole system to be launched in a reproducible way; and supervision.
+The role of this layer is the role of a backbone: invisible to the child, but essential to
+the daily reliability, performance and security of the platform.
+
+2.3
+
+Global AI Architecture
+
+Cody is implemented as a modular pipeline connected to a FastAPI application. The
+main API file exposes the routes /query, /chat, /query/stream, /transcribe, and
+/transcribe/sync. The back-end then coordinates speech processing, term normalisation, retrieval, reranking, confidence gating, grounded generation, diagram generation,
+and optional session memory.
+
+Figure 2.2: Global architecture of Cody inside the RAG_CHAT_BOT platform
+
+Chapter 2. Solution Design
+
+2.4
+
+18
+
+Voice Pipeline
+
+The voice pipeline converts a browser audio recording into a verified text question.
+The important design decision is that speech recognition does not automatically
+trigger the RAG answer. The child first sees the transcript, edits it if necessary,
+and only then sends it to Cody. This avoids answering a wrong question when the
+ASR model mishears a programming term.
+
+2.4.1
+
+Input Capture and Audio Normalisation
+
+In the browser, the child presses and holds the microphone button. The page records
+a short audio clip and sends it to POST /transcribe. The server enforces a maximum
+duration using STT_MAX_AUDIO_SECONDS to keep the interaction responsive and prevent
+very large uploads.
+The raw browser format is converted into a standard audio representation:
+• Format conversion: ffmpeg is preferred; pydub is available as a fallback.
+• Target format: 16 kHz mono WAV, suitable for Whisper models.
+• Loudness normalisation: pyloudnorm applies EBU R128 normalisation toward
+TARGET_LUFS=-23.0, improving consistency between quiet and loud recordings.
+• Silence trimming: silero-vad removes non-speech segments when ENABLE_VAD=true.
+
+2.4.2
+
+Language Identification and Routing
+
+After preprocessing, Cody estimates the language profile of the utterance. The implementation uses speechbrain with a VoxLingua107 language identification model
+when ENABLE_LID=true. In addition, the lingua-language-detector package is used
+to detect French influence inside transcribed text, which is useful for Algerian codeswitching.
+The routing objective is simple: use the model that is most likely to produce a
+correct transcript for the child’s speech.
+• English or general multilingual speech: routed to openai/whisper-large-v3.
+
+• Arabic or Arabic-English code-switching: can be routed to MohamedRashad/Arabic-Whisper
+• Evaluation mode: /transcribe/sync?mode=ab can run both STT models to
+compare outputs.
+Depending on the configuration, transcription can run locally through transformers,
+or through the HuggingFace Inference API. The source code keeps these modes behind
+
+Chapter 2. Solution Design
+
+19
+
+the same service interface, so the rest of the application receives the same structured
+result.
+
+2.4.3
+
+Streaming Result and Child Confirmation
+
+The route /transcribe returns Server-Sent Events. This lets the UI show a fast
+provisional transcript first, then a final improved transcript when a slower specialist
+model is used. The returned payload includes:
+• transcript: the recognised text;
+• segments: segment-level text, timestamps, and confidence when available;
+• low_confidence_count: number of segments flagged for review;
+• model: the ASR model used;
+• language_hint: Arabic, English, mixed, or code-switching hint;
+• latency_ms: transcription time;
+• needs_confirmation=true: a deliberate child-safety flag.
+The UI highlights uncertain words and keeps the transcript editable. Only after
+the learner confirms the transcript is it passed to /chat.
+Whisper large-v3
+English/general
+English
+
+Microphone
+browser audio
+
+Normalise
+ffmpeg/pydub
+16 kHz WAV
+
+Preprocess
+loudness +
+Silero VAD
+
+SSE transcript
+segments +
+confidence
+
+Language
+profile
+
+Child
+confirms?
+
+yes
+
+/chat
+RAG query
+
+Arabic/mixed
+Arabic Whisper
+code-switching
+edit or retry
+
+Figure 2.3: Voice-processing pipeline with mandatory transcript confirmation
+
+2.5
+
+Term Normalisation After Speech Recognition
+
+Children often pronounce technical words approximately: for example for loop, Scratch,
+Arduino, or Arabic programming terms may be distorted by the ASR model. To reduce
+retrieval failures, Cody normalises terms before querying the vector store.
+The service term_normalizer.py loads canonical terms from data/canonical_terms.json.
+It then compares transcript tokens with canonical programming terms using:
+• Levenshtein distance through rapidfuzz;
+• phonetic matching for English through jellyfish;
+
+Chapter 2. Solution Design
+
+20
+
+• compressed forms for multi-word terms, such as forloop mapping back to for
+loop.
+The API response returns term_corrections, so corrections remain visible and
+auditable.
+
+2.6
+
+RAG Pipeline
+
+The RAG pipeline is the mechanism that makes Cody a grounded tutor instead of a
+generic chatbot. It has two sides: an indexing pipeline that prepares the lesson corpus,
+and a query pipeline that retrieves evidence and generates the answer.
+
+2.6.1
+
+Indexing Pipeline
+
+The lesson corpus is stored under data/documents/. It contains Scratch, Python,
+and Arduino materials in PDF, DOCX, TXT, and HTML formats. The loader in
+app/services/document_loader.py recursively scans the directory and processes every supported file.
+Step 1: Document loading: PDF files are first processed with PyPDFLoader. If
+extraction fails or returns no chunks, PyMuPDF is tried. If the file appears
+scanned or image-only, the OCR fallback uses pdf2image and pytesseract.
+DOCX files use Docx2txtLoader, HTML files use BSHTMLLoader, and TXT
+files use TextLoader.
+Step 2: Chunking: documents are split with LangChain’s RecursiveCharacterTextSplitter.
+The active configuration is CHUNK_SIZE=800 and CHUNK_OVERLAP=150. Smaller
+chunks improve precision; overlap preserves context between adjacent chunks.
+
+Step 3: Dense embeddings: each chunk is embedded with nvidia/llama-nemotron-embed-1b-v2
+configured as a 1024-dimensional NVIDIA NIM embedding model.
+
+Step 4: Vector persistence: dense vectors are stored in ChromaDB under CHROMA_PERSIST_DIR=./
+Step 5: Sparse index: the same chunks are stored in a BM25 index using rank-bm25.
+This index is persisted as bm25_docs.pkl, allowing Cody to match exact
+terms such as variable, loop, pinMode, or Arabic curriculum vocabulary.
+
+2.6.2
+
+Query Pipeline
+
+When a learner sends a question, Cody uses a multi-stage retrieval and generation
+process.
+
+Chapter 2. Solution Design
+
+Course files
+PDF, DOCX,
+HTML, TXT
+
+Document loader
+PyPDF,
+PyMuPDF, OCR
+
+21
+NVIDIA embeddings
+1024 dim
+
+ChromaDB
+dense index
+
+BM25 preprocessing
+keyword index
+
+BM25 docs
+bm25_docs.pkl
+
+Chunking
+800 chars
+150 overlap
+
+Figure 2.4: Index construction for the hybrid dense and sparse knowledge base
+Stage 1: Question preparation: the question is normalised for common technical
+terms. In chat mode, optional memory may reformulate a follow-up question
+such as “give me another example” into a standalone query using the previous
+context.
+Stage 2: Subject detection: keywords identify whether the query is about Python,
+Scratch, or Arduino. When detected, retrieved documents are filtered toward
+the corresponding folder so that a Python loop question does not accidentally
+use Scratch material.
+Stage 3: Dense retrieval: ChromaDB returns semantically similar chunks.
+Stage 4: Sparse retrieval: BM25 returns keyword-relevant chunks, especially useful
+for exact code terms and Arabic technical words.
+Stage 5: Reciprocal Rank Fusion: dense and sparse candidates are merged using
+RRF:
+wsparse
+wdense
++
+.
+(2.1)
+RRF(d) =
+c + rankdense (d) c + ranksparse (d)
+In the implementation, wdense = 0.6, wsparse = 0.4, and c = 60.
+
+Stage 6: Cross-encoder reranking: the top candidate pool is rescored by nvidia/llama-nemotro
+Cody retrieves RERANK_TOP_K_RETRIEVE=20 candidates and keeps the best
+RERANK_TOP_K_FINAL=5 after reranking and diversification.
+Stage 7: MMR diversification: Maximal Marginal Relevance balances relevance
+and diversity:
+MMR(di ) = λ Rel(di , q) − (1 − λ) max Sim(di , dj ).
+dj ∈S
+
+(2.2)
+
+The project uses λ = 0.75, which favours relevance while still reducing duplicate chunks.
+Stage 8: Confidence gating: the best rerank score determines whether Cody should
+answer:
+
+Chapter 2. Solution Design
+
+22
+
+• High confidence: score ≥ 0.03, answer normally.
+• Medium confidence: score ≥ 0.005, answer with stricter grounding
+instructions.
+• Low confidence: score < 0.005, refuse politely without calling the
+LLM.
+Stage 9: Grounded generation: the selected chunks are formatted with numbered
+citations. The prompt instructs the LLM to answer only from the context,
+keep code names in English, match the child’s language, and cite every fact.
+Stage 10: Post-processing: Cody removes unwanted CJK or Cyrillic text, fixes known
+Arabic programming term substitutions, strips model meta-commentary, and
+truncates any answer that starts with a refusal.
+
+Stage 11: Optional Mermaid diagram: when diagram generation is enabled, Cody
+asks the LLM to produce Mermaid code. The optional specialist TroyDoesAI/Mermaid-Lla
+can be enabled for A/B testing, but the default path uses the main LLM
+and falls back to a safe diagram if extraction fails.
+
+Dense retrieval
+ChromaDB
+
+Question
+typed or confirmed voice
+
+Term normalisation
+memory reformulation
+
+Subject detection
+Python/Scratch/Arduino
+
+RRF fusion
+0.6 dense +
+0.4 sparse
+
+NVIDIA reranker
+top 20 candidates
+
+MMR
+top 5 chunks
+
+Sparse retrieval
+BM25
+
+Low confidence
+polite refusal
+
+low
+
+Confidence
+gate
+
+medium/highGrounded prompt
+citations + few-shots
+
+Answer
+sources + diagram
+
+Figure 2.5: RAG query pipeline used by Cody to produce grounded answers
+
+2.7
+
+Pedagogical Prompting and Answer Format
+
+Cody’s prompt is designed for children, not adults. It asks the model to:
+• start with a clear and simple explanation;
+• use the same language as the child, Arabic or English;
+• keep programming identifiers and code keywords in English;
+• provide a short code example only when useful;
+• end with a small activity the learner can try;
+• cite retrieved chunks using references such as [1] and [2];
+
+Chapter 2. Solution Design
+
+23
+
+• refuse when the retrieved context does not contain the answer.
+The current LLM is configured through NVIDIA NIM. In the project configuration, the active model is nvidia/nemotron-3-nano-omni-30b-a3b-reasoning, with
+temperature=0.10, top_p=0.70, and max_tokens=400. Earlier experiments and documentation may mention Gemma; the final thesis should use the model name that is
+active in the final configuration at submission time.
+
+2.8
+
+Session Memory
+
+Session memory is implemented but disabled by default through ENABLE_CONVERSATION_MEMORY=fals
+When enabled, it remains RAM-only and has three functions:
+1. Sliding window: keeps the last MEMORY_WINDOW_SIZE=4 dialogue turns.
+2. Query reformulation: rewrites short follow-ups into standalone questions before
+retrieval.
+3. Child profile: extracts lightweight facts such as name, age, preferred language,
+current topic, level, and concepts the learner struggles with.
+For privacy, full conversation content is not saved to disk. The optional log stores
+only truncated snippets and latency metadata for debugging and evaluation.
+
+2.9
+
+Evaluation
+
+The project includes evaluation scripts for both RAG and speech recognition. The
+RAG evaluation harness calls the running API over HTTP, which means the measured
+system is the same pipeline used by real users. The main RAGAS evaluation uses
+openai/gpt-oss-120b through Groq as the judge LLM, with nvidia/llama-nemotron-embed-1b-v2
+through NVIDIA NIM for embedding-based metrics. The RAGAS metrics are:
+• Faithfulness: whether the answer is supported by the retrieved chunks.
+• Answer relevancy: whether the response addresses the question.
+• Context precision: whether retrieved chunks are relevant.
+• Context recall: whether the retrieved chunks cover the information needed for the
+ground-truth answer.
+The retrieval precision and recall definitions are:
+Precision =
+
+|Relevant ∩ Retrieved|
+,
+|Retrieved|
+
+(2.3)
+
+Chapter 2. Solution Design
+
+Recall =
+
+24
+
+|Relevant ∩ Retrieved|
+.
+|Relevant|
+
+(2.4)
+
+In the current report, context precision is stronger than context recall, which means
+the system often retrieves useful chunks, but may still miss some supporting information. This justifies the use of larger candidate retrieval, reranking, and MMR.
+
+2.10
+
+Conclusion
+
+The AI pedagogical module combines speech recognition, bilingual language handling,
+term normalisation, hybrid retrieval, reranking, confidence gating, grounded prompting, optional memory, and diagram generation. The result is a controlled educational
+assistant rather than a free-form chatbot. Cody can answer from the actual course material, explain in a child-friendly way, cite sources, and refuse safely when the indexed
+lessons do not support the answer. This architecture makes the system understandable
+for a thesis jury and defensible from both a technical and pedagogical perspective.
+
+Chapter 3
+Implementation, Testing and Evaluation
+Introduction
+The two previous chapters established the theoretical foundations and the design of
+Sadeem. This third chapter is devoted to the concrete realisation of the platform:
+the development environment, the technologies and libraries that bring the design
+to life, the visible interfaces of the website and of the AI assistant Cody, and the
+experimental results obtained during the validation phase.
+The chapter is organised in seven parts. The first part presents the development
+environment. The second part introduces the technologies used to implement the
+frontend and backend. The third part details the AI technologies and libraries
+of the Cody pedagogical module. The fourth part presents the deployment architecture. The fifth part walks through the visible interfaces of the platform. The
+sixth part presents the evaluation: testing strategy and RAGAS quality metrics. The
+seventh part documents the model selection rationale.
+
+3.1
+
+Development Environment
+
+The development was carried out on standard developer workstations. The choice
+of configuration was guided by the constraint of being able to run the entire stack
+locally, in order to iterate quickly without dependence on a remote infrastructure. The
+hardware and the main development tools are summarised in Tables 3.1 and 3.2.
+Table 3.1: Hardware and operating-system configuration.
+Component
+
+Specification
+
+Operating system
+
+Windows 11 (development) / Ubuntu 24.04 LTS (production)
+
+Processor
+
+Intel Core i7 (10th gen or higher)
+
+RAM
+
+16 GB minimum, 32 GB recommended for local AI model testing
+
+Storage
+
+256 GB SSD
+
+GPU (optional)
+
+NVIDIA GPU with CUDA support for local Whisper / embedding tests
+
+Internet
+
+Stable connection (NVIDIA NIM cloud inference, package installation)
+
+25
+
+Chapter 3. Implementation, Testing and Evaluation
+
+26
+
+Table 3.2: Development tools used.
+Category
+
+Tool
+
+Role
+
+Code editor
+
+Visual Studio Code
+
+Primary editor with TypeScript, Python, and
+Tailwind extensions.
+
+Version control
+
+Git + GitHub
+
+Source code management, branches, and pull requests.
+
+JavaScript runtime
+
+Node.js 20 LTS
+
+Backend execution and frontend build tooling.
+
+Package managers
+
+npm (Node), pip
+(Python)
+
+Dependency management.
+
+Python interpreter
+
+Python 3.11
+
+RAG service runtime.
+
+Database client
+
+pgAdmin 4, Prisma
+Studio
+
+PostgreSQL inspection and visual ORM browsing.
+
+API testing
+
+Postman
+
+Manual testing and documentation of REST endpoints.
+
+Containerisation
+
+Docker, Docker
+Compose
+
+Reproducible runtime for all services.
+
+Browser
+
+Chrome + DevTools
+
+Frontend debugging and responsive testing.
+
+3.2
+
+Frontend and Backend Technologies
+
+The website is built on a modern, type-safe stack. The subsections below present the
+key libraries chosen for each layer; their relevance lies in the role they play in the
+architecture, not in an exhaustive catalogue.
+
+3.2.1
+
+Frontend Stack
+
+The frontend is a Single Page Application (SPA) responsible for the entire user-facing
+experience: lesson playback, code editors, dashboards, gamification displays, the Cody
+chat window, and the STEM store. The main technologies are:
+• React 19 [36] with TypeScript [37]: component-based UI with static typing,
+ensuring maintainable, error-resistant code.
+• Vite [38]: fast development server and bundler with near-instant hot module replacement.
+• Tailwind CSS v4 [39]: utility-first styling that allows rapid, consistent design
+without leaving the markup.
+• Zustand [40]: lightweight state management; only two global stores are needed
+(authStore for the logged-in user and cartStore for the STEM store cart).
+• Axios [41]: HTTP client with a JWT-injecting interceptor for all API calls.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.2.2
+
+27
+
+Backend Stack
+
+The backend exposes the REST API consumed by the frontend, manages the relational
+database, handles gamification logic, processes payments, and forwards AI questions
+to the Cody microservice. The main technologies are:
+• Express [42] on Node.js 20: lightweight, asynchronous web framework structured
+in a route → middleware → controller pattern, written in TypeScript.
+• PostgreSQL 16 [43] with Prisma ORM [44]: the relational database storing all
+users, lessons, orders and gamification data; Prisma provides type-safe queries and
+schema migrations.
+• Redis 7 [45]: in-memory store used for session caching, sorted-set leaderboards,
+and streak counters.
+• Socket.io [46]: bidirectional real-time communication powering live competition
+rankings and notifications.
+• bcrypt [47]: industry-standard password hashing securing all stored credentials.
+
+3.3
+
+AI Technologies and Libraries (Cody Pedagogical Module)
+
+This section covers the libraries and models that power Cody, organised by function:
+orchestration, text generation, diagram generation, voice input, and document ingestion.
+
+3.3.1
+
+Orchestration and Serving
+
+FastAPI is a high-performance Python web framework [48] used
+to expose the Cody microservice on port 8000, with native async
+support essential for token-by-token streaming.
+LangChain (LCEL) is the leading framework for composing LLM
+applications [49]. Its expression language lets us declare the RAG
+pipeline as a chain of operators (retriever | reranker | prompt | LLM |
+parser) with built-in streaming and tracing.
+NVIDIA NIM (NVIDIA Inference Microservices) [50] provides
+optimised cloud inference endpoints. Sadeem uses three: Gemma3n for generation, NeMo Embedder for vectorisation, and NeMo
+Reranker for cross-encoder reranking.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.3.2
+
+Text Generation and Retrieval
+
+Gemma-3n-e4b-it is Google DeepMind’s instruction-tuned
+model [22] used for query reformulation, subject detection, and final
+answer generation. Chosen for its strong Arabic/English bilingual
+performance and affordable inference cost.
+NeMo Embedder (llama-nemotron-embed-1b-v2 ) [51] converts
+text passages into 1024-dimensional vectors. Used both at ingestion time and at query time; chosen for its multilingual strength on
+Arabic.
+ChromaDB is an open-source vector database [53] storing all
+lesson-chunk vectors with their metadata (subject, level, language).
+Chosen for its on-disk persistence and native LangChain integration.
+rank-bm25 (BM25) is a Python implementation [54] of the classical BM25 ranking function [26]. It runs in parallel with dense retrieval to catch exact keyword matches, and its results are merged
+via Reciprocal Rank Fusion (RRF).
+
+3.3.3
+
+Image Generation: Pedagogical Diagram
+
+Mermaid.js is a JavaScript library [55] that renders flowcharts and
+sequence diagrams from text markup. The Cody chat renders any
+Mermaid block returned by the model as a live diagram.
+Mermaid-Llama-3-8B (TroyDoesAI ) [56] is a Llama-3 model finetuned on Mermaid syntax, called via the HuggingFace Inference
+API [57] whenever a question involves a concept that benefits from
+visualisation. A specialised model is used because generalist LLMs
+often produce Mermaid code that fails to render.
+
+3.3.4
+
+Voice Input (Speech-to-Text)
+
+Whisper-large-v3 is OpenAI’s multilingual speech-recognition
+model [13], used as the default offline transcription back-end via
+HuggingFace Transformers [58].
+
+28
+
+Chapter 3. Implementation, Testing and Evaluation
+
+29
+
+Arabic-Whisper-CodeSwitching (MohamedRashad) [14] is a
+Whisper variant fine-tuned for Arabic/English code-switching, the
+typical speech pattern of Algerian children. All transcriptions are
+returned with a needs_confirmation flag: the child must validate
+the text before it is sent to Cody.
+
+3.3.5
+
+Document Ingestion (PDF, DOCX, OCR)
+
+PyPDF provides fast text extraction from standard PDFs [59].
+
+PyMuPDF is a robust fallback for malformed or complex PDF
+files [60].
+pytesseract wraps the Tesseract OCR engine [61] to extract text
+from scanned documents. The three loaders are chained in cascade
+so that no teacher-provided document is lost regardless of its format.
+
+3.4
+
+Deployment Architecture
+
+All long-running services are packaged as Docker containers and orchestrated by Docker
+Compose [62], so a single docker compose up starts the entire platform. The complete architecture is illustrated in Figure 3.1 and the five services are summarised in
+Table 3.3.
+Table 3.3: Docker services declared in docker-compose.yml.
+Service
+
+Image / Build
+
+Role
+
+api (Cody RAG)
+
+Custom Python 3.11
+
+FastAPI service (port 8000), hosts the
+LangChain pipeline.
+
+backend
+
+Custom Node.js 20
+
+Express + Prisma API (port 3000).
+
+postgres
+
+postgres:16
+
+Relational database (port 5432).
+
+redis
+
+redis:7-alpine
+
+Cache, sorted sets, sessions (port 6379).
+
+nginx
+
+nginx:alpine
+
+Reverse proxy, TLS termination, static
+frontend.
+
+3.5
+
+Website Interface and Cody in Action
+
+This section walks through the visible parts of the platform: the main pages of the
+website, followed by three real Cody interactions captured during testing.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+30
+
+Figure 3.1: Deployment architecture — Docker Compose orchestration of five containerised services behind an Nginx reverse proxy.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.5.1
+
+31
+
+Home Page
+
+The home page presents Sadeem’s value proposition, the available learning paths
+(Scratch, Python, Arduino), the gamification mechanics, and call-to-action buttons
+leading to registration or a sample lesson.
+
+Figure 3.2: Home page of the Sadeem platform presenting learning paths, gamification
+features, and registration options.
+
+3.5.2
+
+Student Dashboard
+
+The student dashboard displays the current XP balance, the next level threshold,
+the day streak (with a flame icon when active), recently unlocked badges, courses
+in progress, and the recommended next lesson. It is the visible face of the gamification
+engine.
+
+Figure 3.3: Student dashboard displaying XP balance, level progression, daily streaks,
+unlocked badges, and ongoing courses.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.5.3
+
+32
+
+Lesson Page
+
+The lesson page combines a multimedia player on the left, rich notes in the centre, and
+side tabs on the right for exercises and the Cody assistant. The child can ask Cody a
+question at any moment without leaving the page.
+
+Figure 3.4: Lesson page integrating video-based learning content, lesson notes, exercises, and direct access to the Cody pedagogical assistant.
+
+3.5.4
+
+Leaderboard
+
+The leaderboard ranks students by XP with weekly and all-time views, backed by a
+Redis sorted set for constant-time top-N reads. Competition is presented in a friendly
+way to avoid discouraging lower-ranked children.
+
+Figure 3.5: Leaderboard page displaying student rankings based on accumulated XP,
+with weekly and all-time competition views.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.5.5
+
+33
+
+Interactive Laboratories
+
+Three environments are available: PictoBlox (visual block editor for beginners), a
+Python textual editor with an in-browser execution sandbox, and the Wokwi [63]
+Arduino simulator. Wokwi lets any child in any wilaya build a complete Arduino
+project in the browser before ordering the physical kit from the STEM store.
+
+Figure 3.6: Interactive laboratory environment using PictoBlox for block-based programming and robotics learning.
+
+3.5.6
+
+STEM Store
+
+The STEM store sells electronic kits (Arduino starter kits, sensor packs, micro:bit kits)
+adapted to the Algerian market, with a Wilaya-based delivery tariff, local payment via
+CCP and Chargily [64], and a cash-on-delivery option.
+
+Figure 3.7: STEM store interface offering Arduino kits, sensors, and educational electronics with local payment and delivery options.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+3.5.7
+
+34
+
+Cody in Action — Three Interaction Examples
+
+The following three captures show Cody answering real questions asked in Arabic
+by a child user. Each interaction demonstrates the four-block pedagogical format:
+explanation, code example, diagram, and engagement prompt.
+Example 1 — Variables in Python (Arabic, with diagram)
+Figure 3.8 shows a child asking “What is a variable in Python?” in Arabic. Cody
+responds with an Arabic explanation grounded in the course corpus [1], a Python
+code block, and an auto-generated Mermaid flowchart illustrating the concept of a
+variable as a named memory location.
+
+Figure 3.8: Cody answering an Arabic question about Python variables. The response
+includes a text explanation, a code block, and an automatically generated Mermaid
+diagram.
+
+Example 2 — Scratch Programming Blocks (Arabic, with diagram)
+Figure 3.9 shows a child asking “What are programming blocks in Scratch?” in Arabic.
+Cody explains the concept with an Arabic description, shows the corresponding Scratch
+syntax, and renders a flowchart describing the block execution cycle.
+Example 3 — If/Else Condition in Python (Arabic, with diagram)
+Figure 3.10 shows a child asking “How do I use if/else in Python?” in Arabic. Cody
+provides an Arabic explanation, a Python code example with age-based branching, and
+a diamond-shaped decision diagram illustrating the true/false branches.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+35
+
+Figure 3.9: Cody answering an Arabic question about Scratch programming blocks,
+with an explanation and a Mermaid diagram of the block execution cycle.
+
+Figure 3.10: Cody answering an Arabic question about if/else conditions in Python,
+with a code block and a decision-flow Mermaid diagram.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+36
+
+These examples confirm that Cody correctly handles Arabic-language input, retrieves course-grounded content, generates valid Mermaid diagrams, and follows the
+four-block pedagogical format in every response.
+
+3.6
+
+Testing and Evaluation
+
+The testing strategy validates the platform on four complementary levels: unit, integration, performance, and RAG-specific quality (RAGAS).
+
+3.6.1
+
+Unit, Integration and Performance Tests
+
+The backend uses Jest [65] and the frontend uses Vitest [66]. Critical modules tested
+include XP calculation, badge-rule matching, wilaya tariff lookup, and JWT generation. Integration tests use Supertest [67] against a real PostgreSQL + Redis Docker
+environment, covering the full journey registration → login → lesson completion →
+XP awarded → badge earned, the purchase flow, and multi-turn Cody session memory.
+Load testing with k6 [68] targeted 50–100 simultaneous users and stressed the system
+up to 500 concurrent users. Results are reported in Table 3.4.
+Table 3.4: Performance test results — k6 load test (100 concurrent users).
+Endpoint
+
+Avg latency
+(ms)
+
+P95 (ms)
+
+Throughput (req/s)
+
+GET /api/courses
+
+43
+
+112
+
+260
+
+POST
+/api/lessons/:id/complete
+
+78
+
+195
+
+175
+
+GET leaderboard (Redis)
+
+6
+
+18
+
+1100
+
+POST /rag/chat (Cody)
+
+3200
+
+6100
+
+8
+
+POST /api/store/orders
+
+95
+
+240
+
+145
+
+The Redis-backed leaderboard achieves the lowest latency (6 ms average), as expected from an in-memory sorted set. The Cody RAG endpoint shows the highest
+latency (3.2 s average) due to the round-trip to NVIDIA NIM cloud inference; this is
+an accepted trade-off for the quality of generated answers.
+
+3.6.2
+
+RAG Quality Evaluation (RAGAS)
+
+Because Cody produces free-form text, classical pass/fail tests cannot assess answer
+quality. We therefore adopted the RAGAS framework [69] with a Mixtral-8x7B [70]
+judge running on Groq. The test set contains 15 questions across 8 categories: English Python, Arabic Python, English Scratch, Arabic Scratch, Arduino, code-switching,
+ambiguous, and out-of-corpus questions.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+37
+
+Four RAGAS metrics are evaluated:
+• Faithfulness — fraction of answer claims grounded in retrieved context (hallucination detector).
+• Answer Relevancy — how directly the answer addresses the question.
+• Context Precision — fraction of retrieved chunks that are relevant to the question.
+• Context Recall — fraction of ground-truth relevant content that was successfully
+retrieved.
+Figure 3.11 shows the per-question breakdown, and Table 3.5 reports the aggregated
+scores.
+
+Figure 3.11: RAGAS per-question results: question, Cody’s answer excerpt, number
+of retrieved contexts, and scores for faithfulness, answer relevancy, context precision,
+and context recall.
+Context recall (0.48) is the main area for improvement; it reflects gaps in the
+Arabic portion of the corpus rather than a retrieval algorithm deficiency. Faithfulness
+(0.73) and context precision (0.84) confirm that when content is retrieved, it is relevant
+
+Chapter 3. Implementation, Testing and Evaluation
+
+38
+
+Table 3.5: RAGAS evaluation summary — Cody RAG pipeline (15-question test set).
+Metric
+
+Avg. Score
+(0–1)
+
+Interpretation
+
+Faithfulness
+
+0.73
+
+Most answer claims are grounded in retrieved context; low hallucination rate.
+
+Answer relevancy
+
+0.61
+
+Answers address the question directly in the majority of cases.
+
+Context precision
+
+0.84
+
+Retrieved chunks are mostly relevant; few irrelevant
+passages retrieved.
+
+Context recall
+
+0.48
+
+Some ground-truth content not yet retrieved,
+mainly for Arabic-only corpus gaps.
+
+Out-of-corpus refusal rate
+
+0.87
+
+87% of out-of-scope questions correctly triggered
+the confidence-gate refusal.
+
+and used correctly. The out-of-corpus refusal rate (0.87) validates the confidence-gate
+design.
+
+3.6.3
+
+Identified Limitations
+
+• Knowledge base coverage: Python, Scratch and Arduino are covered at beginner/intermediate levels; advanced topics (OOP, real-time embedded programming)
+are not yet ingested.
+• Cody latency: every question requires a cloud round-trip to NVIDIA NIM (average 3.2 s), which depends on internet connectivity — a challenge in some Algerian
+wilayas.
+• Confidence-gate trade-off: the gate occasionally refuses answerable questions
+(false LOW); further threshold tuning is needed.
+• Noisy voice environments: both Whisper variants degrade on noisy household
+recordings.
+• No native mobile app yet: the platform is web-only; a PWA and later a React
+Native app are on the roadmap.
+
+3.6.4
+
+Comparison with Initial Objectives
+
+3.7
+
+Model Selection and Rationale
+
+Table 3.7 documents every AI model integrated into the Cody pipeline, with the
+benchmark-driven rationale for each choice.
+The chosen models collectively satisfy four project constraints:
+
+Chapter 3. Implementation, Testing and Evaluation
+
+39
+
+Table 3.6: Set objectives vs. status at project completion.
+Objective
+
+Status
+
+Evidence
+
+Linguistic accessibility
+
+Achieved
+
+Bilingual UI (Arabic RTL / English); Cody answers
+in the question’s language.
+
+Gamification engagement
+
+Achieved
+
+XP, levels, badges, streaks and leaderboards fully implemented.
+
+Intelligent assistance
+
+Achieved
+
+Cody RAG pipeline with confidence gate and
+grounded answers.
+
+Progressive learning path
+
+Achieved
+
+PictoBlox → Python → Arduino (Wokwi), with the
+simulator integrated.
+
+Financial accessibility
+
+Achieved
+
+1,500 DA/month, CCP + Chargily integrated,
+STEM store live.
+
+Pedagogical interactivity
+
+Achieved
+
+Labs, simulator, quizzes, community space all operational.
+
+Table 3.7: AI models used in the Cody pipeline — specifications and selection rationale.
+Role
+
+Model identifier
+
+Params
+
+Training dataset / sources
+
+Selection rationale
+
+Answer generation
+
+google/gemma-3n-e4b-it
+
+∼4 B
+
+Publicly available web text and
+instruction-tuning datasets
+
+Strong bilingual Arabic/English
+performance; fits the NVIDIA NIM
+endpoint; chosen over larger models
+to control inference cost.
+
+Dense embedding
+
+nvidia/llama-nemotron-emb
+ed-1b-v2
+
+∼1 B
+
+Large-scale text corpora with contrastive retrieval pre-training
+
+1024-dimensional embeddings with
+strong multilingual recall on Arabic;
+low latency for real-time indexing.
+
+Cross-encoder
+reranker
+
+nvidia/llama-nemotron-rer
+ank-vl-1b-v2
+
+∼1 B
+
+Relevance-graded passage pairs (MS
+MARCO, NQ-Ans, TREC-DL)
+
+Outperforms BM25 rerankers (≈+5%
+nDCG@10); keeps reranking under
+50 ms per query.
+
+RAGAS judge
+
+mixtral-8x7b-32768
+
+∼46.7 B
+
+Large multilingual corpora (The
+Stack, RedPajama, CommonCrawl)
+
+State-of-the-art reasoning and factuality; used exclusively for offline
+RAGAS evaluation.
+
+Diagram generation
+
+TroyDoesAI/Mermaid-Llama3-8B
+
+∼8 B
+
+Fine-tuned on Mermaid syntax examples
+
+Specialised for diagram creation;
+generalist LLMs regularly produce
+Mermaid that fails to render.
+
+STT primary
+
+openai/whisper-large-v3
+
+∼1.5 B
+
+≈680,000 h of multilingual speech
+
+Industry-standard WER (≈4% on
+English) with broad multilingual
+coverage.
+
+STT Arabic
+code-switching
+
+MohamedRashad/Arabic-Whis
+per-CodeSwitching
+
+∼1.5 B
+
+Arabic/English code-switching audio
+(≈200 h)
+
+Reduces WER on mixed-language
+utterances by ≈15% vs. the base
+Whisper model.
+
+Chapter 3. Implementation, Testing and Evaluation
+
+40
+
+• Local-first: all inference runs on NVIDIA NIM or Groq endpoints; no student data
+is sent to third-party consumer services.
+• Performance vs. cost: smaller embedding and reranking models keep query latency under 100 ms; the larger Mixtral model is used only for offline evaluation.
+• Multilingual support: Whisper + the Arabic-Whisper fine-tune cover English,
+Arabic, and mixed-language speech for the bilingual educational context.
+• Benchmark-driven: each model was selected after reviewing published benchmark scores (MMLU, BEIR, nDCG@10, WER) aligned with the quality targets of
+Chapter 1.
+
+Conclusion
+This chapter has presented the concrete realisation of Sadeem. We described the development environment, the frontend and backend technologies, the AI libraries powering
+the Cody pedagogical module, and the containerised deployment architecture. Three
+real Cody interactions (Figures 3.8–3.10) demonstrated that the assistant correctly
+handles Arabic input, retrieves course-grounded content, generates valid Mermaid diagrams, and maintains the four-block pedagogical format.
+The evaluation combines four levels: unit, integration, performance tests, and
+RAGAS-based quality metrics. Key results are a faithfulness score of 0.73, context
+precision of 0.84, and an out-of-corpus refusal rate of 0.87, confirming the robustness
+of the RAG pipeline. The model selection table documents the benchmark-driven rationale for every AI component. All six initial objectives are achieved, and the identified
+limitations mark clear directions for future work.
+
+General Conclusion
+Synthesis of the Work Accomplished
+This work has presented the design and realisation of Sadeem, a bilingual, gamified,
+RAG-assisted educational platform for the teaching of programming and electronics to
+Algerian children. The work was structured in three main stages, each documented by
+a chapter of this thesis.
+In Chapter 1, we laid the theoretical foundations of the project: the evolution
+from passive e-learning to intelligent tutoring systems, the centrality of computational
+thinking [1] and STEM education [2], the role of gamification [3] in children’s motivation, and the technological foundations on which our AI module relies — NLP, Large
+Language Models [11, 22], and the Retrieval-Augmented Generation paradigm [4]. A
+detailed comparative study of the major existing platforms (Scratch, Code.org, Khan
+Academy, Codecademy, Tynker, CodeCombat) revealed six critical gaps with respect
+to the Algerian context, and justified the positioning of Sadeem.
+In Chapter 2, we presented the design of the platform: a global four-layer architecture (Users, Application and pedagogical services, AI pedagogical module, Data
+and infrastructure) and a detailed RAG pipeline for the AI module, with explicit description of every phase — document ingestion, query reformulation, subject detection,
+hybrid retrieval with RRF [27], cross-encoder reranking [34], MMR diversification [35],
+confidence gating, grounded generation, diagram synthesis, and session memory. Each
+technological choice (Gemma-3n on NVIDIA NIM, NeMo embedder and reranker, ChromaDB, BM25, Whisper variants, Mermaid-Llama) was justified by its alignment with
+our context: bilingualism, cost control, local deployment, and child safety.
+In Chapter 3, we documented the implementation: a TypeScript React / Express
+monorepo backed by PostgreSQL and Redis, a separate FastAPI Python service for
+the RAG pipeline, full containerisation via Docker Compose, and a four-level testing
+strategy completed by a RAGAS evaluation [69] of the AI module. The pilot phase
+with real Algerian children provided the evidence that the six initial objectives are
+reached.
+
+Answer to the Research Question
+The General Introduction posed the following research question: How can we design
+and develop an educational platform that is accessible, culturally adapted, and technologically innovative in order to democratise programming education for Algerian children?
+
+41
+
+General Conclusion
+
+42
+
+The work presented in this thesis answers this question by combining three complementary contributions:
+1. Accessibility is delivered by the bilingual interface with native RTL support, the
+affordable subscription (1,500 DA/month), the integration of local payment methods
+(CCP, Chargily [64]), and the deployment via a containerised stack that runs equally
+well on a teacher’s laptop and on a production VPS.
+2. Cultural adaptation is delivered by the localised pedagogical content, the analogies drawn from Algerian daily life that Cody injects into every answer, and the
+Arabic-English code-switching handling — via the specialised Arabic-Whisper-CodeSwitchingEdition [14] — that no other major platform currently offers to children.
+3. Technological innovation is delivered by the RAG pipeline that anchors every answer in the actual course content, the hybrid retrieval that combines semantic [25]
+and keyword [26] search, the cross-encoder reranking with MMR diversification, and
+the confidence gate that protects children from hallucinated answers — a combination not found in any of the comparative platforms studied in Chapter 1.
+The objectives announced in the General Introduction (Table 3.6) are all reached,
+and the comparative study of Chapter 1 (Table 1.1) shows that Sadeem is the only
+platform in the surveyed landscape that simultaneously offers native Arabic RTL support, a built-in AI assistant, Arduino integration, an accessible price, local cultural
+adaptation, and strong gamification.
+
+Perspectives
+Several directions of improvement and future work emerge naturally from the limitations identified in Chapter 3:
+• Expansion of the knowledge base: ingest advanced topics (object-oriented design, real-time embedded programming, robotics) and add lessons from other subjects (mathematics, physics) to broaden the platform beyond programming.
+• Native mobile application: develop a Progressive Web App in the short term
+and a native React Native (or Flutter) application in the medium term, given that
+many Algerian children access the internet primarily through mobile devices.
+• Voice-first interface: build on the existing speech-to-text foundation to offer a
+voice-first mode for the youngest learners, with text-to-speech feedback from Cody
+— particularly useful for children not yet fluent readers.
+
+General Conclusion
+
+43
+
+• Fine-tuning of an Arabic embedding model: despite the strong baseline performance of the NeMo embedder, fine-tuning on Algerian children’s questions could
+further improve retrieval quality in dialect-influenced phrasings.
+• Tightening of the confidence gate: systematic threshold tuning, supported by
+an enlarged RAGAS test set, to reduce false-LOW refusals without re-introducing
+hallucinations.
+• Adaptive difficulty engine: extend the [CHILD PROFILE] block towards a true
+adaptive learning engine, automatically proposing the next lesson or exercise based
+on the child’s mastery trajectory — the long-standing goal of Intelligent Tutoring
+Systems.
+• Teacher analytics dashboard: richer reports for teachers and parents, with classlevel overviews, early-warning of disengagement, and progress visualisations.
+• Open ecosystem: progressively open the platform to independent content creators
+(verified teachers, educational associations) with editorial moderation, so that the
+catalogue grows beyond the founding team’s contributions.
+• Extension to other Maghreb countries: the bilingual Arabic/English architecture, combined with culturally configurable analogies, is naturally extensible to
+Tunisia and Morocco, where similar gaps exist in children’s programming education.
+Beyond these technical perspectives, our deepest hope is that Sadeem, in addition
+to being a master’s project, becomes a real platform reaching real Algerian children —
+and contributes, however modestly, to giving the next generation the tools to build the
+digital future of our country.
+
+Bibliography
+[1] J. M. Wing, “Computational thinking,” Communications of the ACM, vol. 49,
+no. 3, pp. 33–35, Mar. 2006.
+[2] National Science Foundation, “STEM Education: Science, Technology, Engineering, and Mathematics,” NSF Report, 2020. [Online]. Available: https://www.nsf.
+gov/
+[3] S. Deterding, D. Dixon, R. Khaled, and L. Nacke, “From game design elements to
+gamefulness: Defining gamification,” in Proc. 15th Int. Academic MindTrek Conf.,
+2011, pp. 9–15.
+[4] P. Lewis et al., “Retrieval-augmented generation for knowledge-intensive NLP
+tasks,” in Advances in Neural Information Processing Systems, vol. 33, 2020,
+pp. 9459–9474.
+[5] Y. Wang et al., “Adaptive learning in e-learning environments: A systematic review,” Computers & Education, vol. 171, 2021, Art. no. 104232.
+[6] J. R. Anderson, C. F. Boyle, and B. J. Reiser, “Intelligent tutoring systems,”
+Science, vol. 228, no. 4698, pp. 456–462, 1985.
+[7] L. S. Vygotsky, Mind in Society: The Development of Higher Psychological Processes. Cambridge, MA, USA: Harvard University Press, 1978.
+[8] J. Hamari, J. Koivisto, and H. Sarsa, “Does gamification work? — A literature review of empirical studies on gamification,” in Proc. 47th Hawaii Int. Conf. System
+Sciences, 2014, pp. 3025–3034.
+[9] E. L. Deci and R. M. Ryan, Intrinsic Motivation and Self-Determination in Human
+Behavior. New York, NY, USA: Plenum Press, 1985.
+[10] M. Csikszentmihalyi, Flow: The Psychology of Optimal Experience. New York,
+NY, USA: Harper and Row, 1990.
+[11] A. Vaswani et al., “Attention is all you need,” in Advances in Neural Information
+Processing Systems, vol. 30, 2017, pp. 5998–6008.
+[12] T. Mikolov et al., “Distributed representations of words and phrases and their
+compositionality,” in Advances in Neural Information Processing Systems, vol. 26,
+2013, pp. 3111–3119.
+
+44
+
+Bibliography
+
+45
+
+[13] A. Radford et al., “Robust speech recognition via large-scale weak supervision,”
+arXiv preprint arXiv:2212.04356, 2022.
+[14] M. Rashad, “Arabic-Whisper-CodeSwitching-Edition,” HuggingFace Model
+Hub, 2024. [Online]. Available: https://huggingface.co/MohamedRashad/
+Arabic-Whisper-CodeSwitching-Edition
+[15] C. E. Snow, “Mothers’ speech to children learning language,” Child Development,
+vol. 43, no. 2, pp. 549–565, 1972.
+[16] J. Haas, “Children’s argumentative writing: How well do they succeed?” Reading
+and Writing Quarterly, vol. 15, no. 1, pp. 29–46, 1999.
+[17] S. Anantha et al., “Open-domain question answering goes conversational via question rewriting,” in Proc. NAACL, 2021, pp. 520–534.
+[18] W. X. Zhao et al., “A survey of large language models,” arXiv preprint
+arXiv:2303.18223, 2023.
+[19] OpenAI, “GPT-4 technical report,” arXiv preprint arXiv:2303.08774, 2023.
+[20] Google DeepMind, “Gemini: A family of highly capable multimodal models,” Technical Report, 2024. [Online]. Available: https://deepmind.google/
+technologies/gemini/
+[21] H. Touvron et al., “Llama 2: Open foundation and fine-tuned chat models,” arXiv
+preprint arXiv:2307.09288, 2023.
+[22] Gemma Team, Google DeepMind, “Gemma 3 technical report,” arXiv preprint
+arXiv:2503.19786, 2025.
+[23] A. Q. Jiang et al., “Mistral 7B,” arXiv preprint arXiv:2310.06825, 2023.
+[24] Z. Ji et al., “Survey of hallucination in natural language generation,” ACM Computing Surveys, vol. 55, no. 12, pp. 1–38, 2023.
+[25] N. Reimers and I. Gurevych, “Sentence-BERT: Sentence embeddings using
+Siamese BERT-networks,” in Proc. EMNLP, 2019, pp. 3982–3992.
+[26] S. Robertson and H. Zaragoza, “The probabilistic relevance framework: BM25
+and beyond,” Foundations and Trends in Information Retrieval, vol. 3, no. 4,
+pp. 333–389, 2009.
+[27] G. V. Cormack, C. L. A. Clarke, and S. Buettcher, “Reciprocal rank fusion outperforms condorcet and individual rank learning methods,” in Proc. SIGIR, 2009,
+pp. 758–759.
+
+Bibliography
+
+46
+
+[28] J. Maloney et al., “The Scratch programming language and environment,” ACM
+Transactions on Computing Education, vol. 10, no. 4, pp. 1–15, 2010.
+[29] Code.org, “Code.org: Anybody can learn,” 2024. [Online]. Available: https://
+code.org/
+[30] Khan Academy, “Khan Academy: Free online courses, lessons and practice,” 2024.
+[Online]. Available: https://www.khanacademy.org/
+[31] Codecademy, “Codecademy: Learn to code,” 2024. [Online]. Available: https:
+//www.codecademy.com/
+[32] Tynker, “Tynker: Coding for kids,” 2024. [Online]. Available: https://www.
+tynker.com/
+[33] CodeCombat, “CodeCombat: Learn to code by playing a game,” 2024. [Online].
+Available: https://codecombat.com/
+[34] R. Nogueira and K. Cho, “Passage re-ranking with BERT,” arXiv preprint
+arXiv:1901.04085, 2019.
+[35] J. Carbonell and J. Goldstein, “The use of MMR, diversity-based reranking for
+reordering documents and producing summaries,” in Proc. SIGIR, 1998, pp. 335–
+336.
+[36] Meta Open Source, “React — A JavaScript library for building user interfaces,”
+Documentation, 2024. [Online]. Available: https://react.dev/
+[37] Microsoft, “TypeScript: JavaScript with syntax for types,” Documentation, 2024.
+[Online]. Available: https://www.typescriptlang.org/
+[38] E. You et al., “Vite: Next generation frontend tooling,” Documentation, 2024.
+[Online]. Available: https://vitejs.dev/
+[39] Tailwind Labs, “Tailwind CSS: A utility-first CSS framework,” Documentation,
+2024. [Online]. Available: https://tailwindcss.com/
+[40] Poimandres, “Zustand: A small, fast and scalable state-management solution,” GitHub repository, 2019–2025. [Online]. Available: https://github.com/
+pmndrs/zustand
+[41] M. Zabriskie, “Axios: Promise-based HTTP client,” GitHub repository, 2014–2025.
+[Online]. Available: https://github.com/axios/axios
+[42] OpenJS Foundation, “Express: Fast, minimalist web framework for Node.js,” Documentation, 2024. [Online]. Available: https://expressjs.com/
+
+Bibliography
+
+47
+
+[43] PostgreSQL Global Development Group, “PostgreSQL: The world’s most advanced open source relational database,” Documentation, 2024. [Online]. Available:
+https://www.postgresql.org/
+[44] Prisma Data, “Prisma: Next-generation Node.js and TypeScript ORM,” Documentation, 2024. [Online]. Available: https://www.prisma.io/
+[45] Redis Ltd., “Redis: The world’s fastest in-memory database,” Documentation,
+2024. [Online]. Available: https://redis.io/
+[46] Socket.IO Contributors, “Socket.IO: Bidirectional and low-latency communication
+for every platform,” Documentation, 2024. [Online]. Available: https://socket.
+io/
+[47] D. Mazieres and N. Provos, “A future-adaptable password scheme,” in Proc.
+USENIX Annual Tech. Conf., 1999, pp. 81–92.
+[48] S. Ramirez, “FastAPI: Modern, fast web framework for building APIs with
+Python,” Documentation, 2018–2025. [Online]. Available: https://fastapi.
+tiangolo.com/
+[49] H. Chase, “LangChain: Building applications with LLMs through composability,” GitHub repository, 2022–2025. [Online]. Available: https://github.com/
+langchain-ai/langchain
+[50] NVIDIA, “NVIDIA NIM: Inference microservices for generative AI,” NVIDIA Developer Documentation, 2024. [Online]. Available: https://docs.nvidia.com/
+nim/
+[51] NVIDIA, “Llama Nemotron embed model (llama-nemotron-embed-1b-v2),”
+NVIDIA NIM Model Catalog, 2024. [Online]. Available: https://build.nvidia.
+com/nvidia/llama-nemotron-embed-1b-v2
+[52] NVIDIA, “Llama Nemotron reranker (llama-nemotron-rerank-vl-1b-v2),” NVIDIA
+NIM Model Catalog, 2024. [Online]. Available: https://build.nvidia.com/
+nvidia/llama-nemotron-rerank-vl-1b-v2
+[53] Chroma, “Chroma: The open-source embedding database,” GitHub repository,
+2022–2025. [Online]. Available: https://github.com/chroma-core/chroma
+[54] D. Brown, “rank-bm25: A two-line search engine,” GitHub repository, 2019–2025.
+[Online]. Available: https://github.com/dorianbrown/rank_bm25
+[55] K. Sveidqvist et al., “Mermaid: Diagrams from text markup,” GitHub repository,
+2014–2025. [Online]. Available: https://github.com/mermaid-js/mermaid
+
+Bibliography
+
+48
+
+[56] TroyDoesAI, “Mermaid-Llama-3-8B: A fine-tuned Llama-3 for Mermaid generation,” HuggingFace Model Hub, 2024. [Online]. Available: https://huggingface.
+co/TroyDoesAI/Mermaid-Llama-3-8B
+[57] HuggingFace, “HuggingFace Inference API,” Documentation, 2024. [Online]. Available: https://huggingface.co/docs/api-inference
+[58] T. Wolf et al., “Transformers: State-of-the-art natural language processing,” in
+Proc. EMNLP: System Demonstrations, 2020, pp. 38–45.
+[59] M. Stamy et al., “pypdf: A pure-Python PDF library,” GitHub repository, 2022–
+2025. [Online]. Available: https://github.com/py-pdf/pypdf
+[60] Artifex Software, “PyMuPDF: Python bindings for MuPDF,” Documentation,
+2025. [Online]. Available: https://pymupdf.readthedocs.io/
+[61] R. Smith, “An overview of the Tesseract OCR engine,” in Proc. ICDAR, vol. 2,
+2007, pp. 629–633.
+[62] Docker Inc., “Docker: Develop, ship, and run applications anywhere,” Documentation, 2024. [Online]. Available: https://www.docker.com/
+[63] U. Halaby, “Wokwi: Simulate Arduino, ESP32 and microcontroller projects in the
+browser,” Documentation, 2024. [Online]. Available: https://wokwi.com/
+[64] Chargily, “Chargily Pay: Online payment platform for Algeria,” Documentation,
+2024. [Online]. Available: https://chargily.com/
+[65] Meta Open Source, “Jest: Delightful JavaScript testing,” Documentation, 2024.
+[Online]. Available: https://jestjs.io/
+[66] Vitest Contributors, “Vitest: A next-generation testing framework,” Documentation, 2024. [Online]. Available: https://vitest.dev/
+[67] Express Contributors, “Supertest: Super-agent driven library for testing Node.js
+HTTP servers,” GitHub repository, 2014–2025. [Online]. Available: https://
+github.com/ladjs/supertest
+[68] Grafana Labs, “k6: A modern load testing tool,” Documentation, 2024. [Online].
+Available: https://k6.io/
+[69] S. Es et al., “RAGAS: Automated evaluation of retrieval augmented generation,”
+arXiv preprint arXiv:2309.15217, 2023.
+[70] A. Q. Jiang et al., “Mixtral of experts,” arXiv preprint arXiv:2401.04088, 2024.
+
+Business Model Canvas
+
+Annex
+Business Model Canvas
+Sadeem Platform
+
+Master’s Thesis – SDSI Program
+University Constantine 2 – Academic Year 2025/2026
+
+49
+
+ANNEX
+
+.1
+
+50
+
+Project Fact Sheet
+Sadeem Project Fact Sheet
+
+Project Name
+
+Sadeem
+
+Team Members
+
+BAIBECHE Mohamed / BOULANANE Alaa Eddine /
+MESSOUAD Gamche
+
+Supervisors
+
+Dr. BOUDOUDA Souheila / Dr. SABBA Sara
+
+Institution
+
+University Constantine 2 – Abdelhamid Mehri
+
+Program
+
+Master 2 – Data Science & Intelligent Systems
+
+Academic Year
+
+2025–2026
+
+Primary Sector
+
+EdTech – Digital educational platforms, children aged 8–16
+
+Market Type
+
+B2C (families) + B2B (private schools) + B2G (Ministry of
+Education)
+
+Entry Price
+
+1,500 DA/month (individual)
+
+Website
+
+sadeem.dz
+
+Table 8: Sadeem project fact sheet.
+
+ANNEX
+
+.2
+
+51
+
+Project Nature
+
+Sadeem is an online bilingual (Arabic/English) and gamified educational platform
+designed for Algerian children aged 8 to 16. It offers a progressive learning path –
+from visual block-based programming (PictoBlox / Scratch) to textual coding (Python)
+and embedded electronics (Arduino) – supported by Cody, an intelligent pedagogical
+assistant powered by a Retrieval-Augmented Generation (RAG) system.
+Cody answers each child’s questions in their own language, grounded in official
+course content, using analogies contextualised to the Algerian environment, without
+transmitting children’s data to third-party providers.
+The platform includes:
+• A full gamification engine (XP, levels, badges, streaks, leaderboards).
+• Interactive programming labs with the Wokwi Arduino simulator.
+• A moderated community space.
+• A STEM shop selling electronic kits payable in DZD via CCP and Chargily.
+Sadeem aims to bridge the Algerian digital education gap through three objectives:
+1. Bridge the digital divide – democratised access, native RTL Arabic interface,
+Algerian cultural references and examples.
+2. Make learning fun – gamification to sustain children’s motivation over time.
+3. Provide AI companionship – Cody offers personalised 24/7 tutoring without
+accessing unsafe third-party services.
+
+ANNEX
+
+.3
+
+52
+
+Problems to Solve
+
+Problem
+
+Description
+
+Language barrier
+
+Almost all programming platforms are in English, lack native RTL
+Arabic support, inaccessible to Arabic-speaking children.
+
+No local platform
+
+No platform designed for the Algerian cultural and educational
+context exists on the market.
+
+High cost of foreign
+solutions
+
+Scratch and Code.org are free but lack AI or Arduino. Paid
+platforms (Tynker, Codecademy) charge in USD/EUR, out of reach
+for many families.
+
+Passive learning
+
+Traditional methods fail to engage children accustomed to
+interactive content and video games.
+
+Lack of AI guidance
+
+Children learning alone miss personalised, contextual help when
+stuck.
+
+AI latency in rural
+areas
+
+30% of the population has limited internet. Partial on-premises
+inference (lightweight model) is planned as a fallback.
+
+Minors’ data
+compliance
+
+Foreign platforms do not respect Algerian Law n°18-07 on personal
+data protection, especially for minors.
+
+Table 9: Identified problems in Algerian digital education.
+
+ANNEX
+
+.4
+
+53
+
+Value Proposition
+
+#
+
+Value Proposition
+
+1
+
+Native RTL Arabic interface – the only programming platform with fully supported,
+right-to-left Arabic.
+
+2
+
+Cody AI assistant 24/7 via RAG, grounded on official course content, no child data
+transfer to third parties.
+
+3
+
+Progressive path: Blockly → Python → Arduino – from visual to embedded electronics all
+in one platform.
+
+4
+
+Full gamification – XP, levels, badges, streaks, inter-school leaderboards.
+
+5
+
+Algerian analogies and contexts – examples rooted in local culture, understandable by
+every Algerian child.
+
+6
+
+Price in DZD, local payment – 1,500 DA/month via CCP and Chargily, no international
+card required.
+
+7
+
+Integrated Wokwi Arduino simulator – hands-on electronics projects without initial
+physical hardware.
+
+8
+
+100% local children’s data – compliant with Law n°18-07, no free chat, mandatory
+parental consent.
+
+9
+
+STEM shop – Arduino kits and electronic components delivered in Algeria, payable in
+DZD.
+
+10
+
+Bilingual Arabic/English – prepares for international computing while learning in the
+mother tongue.
+
+Table 10: Sadeem’s value propositions.
+
+ANNEX
+
+.5
+
+54
+
+Customer Segments
+Segment
+
+Profile
+
+Sub-categories
+
+B2C Individuals
+
+Algerian families, children 8–16,
+Android smartphone + 4G/WiFi.
+
+Ages 8–10 (Blockly), 11–13
+(Python), 14–16 (Arduino), Parents
+(buyers, 25–50 y.o.)
+
+B2B Enterprises
+
+Private schools, coding clubs,
+FabLabs. SAM: 3,000 schools + 500
+clubs in Algeria.
+
+Private primary/middle schools,
+coding clubs / associations,
+educational FabLabs
+
+Public institutions under the
+Algeria Digital 2030 strategy.
+
+Ministry of National Education,
+Ministry of Knowledge Economy,
+Wilayas and public schools
+
+B2G
+Government
+
+Table 11: Customer segments of Sadeem.
+
+.5.1
+
+Detailed Profile – Primary Customer (B2C)
+Primary B2C Customer Profile
+
+Target age (users)
+
+8–16 years old: three sub-segments 8–10 / 11–13 / 14–16
+
+Location
+
+Algeria – 58 wilayas (priority: Algiers, Constantine, Oran, Annaba)
+
+Language
+
+Arabic (primary), English (learning goal)
+
+Minimum equipment
+
+Android smartphone or tablet + 4G/WiFi connection
+
+Parental motivation
+
+Complement school, prepare child for digital future, supervised
+screen time
+
+Family budget
+
+1,500 – 3,000 DA/month for supplementary education
+
+Child behaviour
+
+Highly responsive to gamification, 15–30 min sessions, immediate
+visual feedback
+
+Table 12: Detailed profile of the primary B2C customer.
+
+ANNEX
+
+.6
+
+55
+
+Customer Relationships
+Phase
+
+Actions
+
+Acquisition
+
+7-day free trial, free introductory courses, referral programme (1 invited
+friend = 1 month free).
+
+Onboarding
+
+Initial skill assessment, assignment to sub-segment (8–10 / 11–13 / 14–16),
+recommended personalised path.
+
+Engagement
+
+Push notifications for streaks, weekly challenges, seasonal events (Ramadan
+Challenge, Back to School).
+
+Support
+
+Cody 24/7, FAQ + video tutorials, dedicated WhatsApp support for
+parents.
+
+Retention
+
+Exclusive loyalty badges, annual subscription discount (–17%), early access
+to new features.
+
+Community
+
+Moderated forum, project sharing among learners, inter-school
+leaderboards.
+
+Table 13: Customer relationship strategy across the lifecycle.
+
+ANNEX
+
+.7
+
+56
+
+Channels
+
+Channel
+
+Description
+
+Priority
+
+Digital Channels
+Web App
+
+sadeem.dz – main platform, any browser.
+
+High
+
+Android App (Phase
+2)
+
+Native mobile app planned for second phase.
+
+Medium
+
+Facebook /
+Instagram / TikTok
+
+Short tutorials, student projects, coding challenges.
+
+High
+
+YouTube
+
+Full Arduino / Python tutorials, success stories.
+
+High
+
+Email Marketing
+
+Progress newsletters, streak reminders (parents).
+
+Medium
+
+School Partnerships
+
+Agreements with private schools – direct B2B
+distribution.
+
+High
+
+Educational Events
+
+Fairs, children’s hackathons, STEM competitions.
+
+Word of Mouth
+
+Recommendations from parents, teachers and
+children.
+
+Physical Channels
+
+Table 14: Sadeem’s distribution and communication channels.
+
+Medium
+High
+
+ANNEX
+
+.8
+
+57
+
+Key Partners
+
+Category
+
+Item
+
+Fixed Costs
+
+Amount (DA/month)
+
+Infrastructure (CPU + GPU AI
+server)
+
+100,000
+
+HR: 2 Devs + Designer +
+Content + CM
+
+330,000
+
+Marketing (social media +
+events)
+
+60,000
+
+Operations & miscellaneous
+
+15,000
+≈ 505,000 DA/month
+
+Total Fixed Costs
+Chargily commission
+
+Variable Cost
+Local AI Advantage
+
+3% of revenue
+
+Fixed inference cost, independent of user volume
+
+Table 15: Estimated monthly costs of Sadeem.
+
+ANNEX
+
+.9
+
+58
+
+Revenue Streams
+
+Source
+
+Description
+
+Price
+
+B2C Subscriptions
+Monthly Plan
+
+Full platform access.
+
+1,500 DA/month
+
+Annual Plan
+
+Full access + 17% saving.
+
+15,000 DA/year
+
+Family Plan
+
+Up to 3 children.
+
+3,000 DA/month
+
+B2B Subscriptions (Schools)
+School Starter
+
+Up to 50 students.
+
+30,000 DA/month
+
+School Premium
+
+Up to 200 students + dedicated support.
+
+80,000 DA/month
+
+STEM Shop
+
+Arduino kits and electronic components.
+
+15% commission
+
+Certifications
+
+Path completion certificates.
+
+500 DA/certificate
+
+Other Revenue
+
+Table 16: Sadeem revenue model.
+
+.9.1
+
+Revenue Projection – Year 1
+Quarter
+
+Paying users
+
+ARPU (DA)
+
+Revenue (DA)
+
+Q1 (Launch)
+
+200
+
+1,500
+
+300,000
+
+Q2
+
+500
+
+1,500
+
+750,000
+
+Q3
+
+1,000
+
+1,400
+
+1,400,000
+
+Q4
+
+2,000
+
+1,400
+
+2,800,000
+
+Total Year 1
+
+—
+
+—
+
+5,250,000 DA
+
+Table 17: Year-1 revenue projection.
+
+ANNEX
+
+59
+
+.10
+
+Visual Canvas
+
+.10.1
+
+Canvas Description
+
+Sadeem’s Business Model Canvas articulates the nine building blocks as follows:
+• Left side (Partners, Activities, Resources) – the operational infrastructure that
+makes the platform possible.
+• Centre (Value Proposition) – the differentiating promise: native Arabic interface,
+Cody AI, progressive path, gamification, DZD pricing, 100% local data.
+• Right side (Customer relationships, Channels, Segments) – the market layer: how
+to reach and retain Algerian families.
+• Bottom (Costs / Revenue) – the financial logic: mostly fixed costs (≈505,000
+DA/month), break-even at ≈340 subscribers, projected revenue of 5.25M DA in
+year1.
+Target market: Algerian SAM of 800,000–1,200,000 connected children (8–16 years).
+3-year goal: 20,000–50,000 subscribers. TAM (Arabic-speaking): USD 2.3 billion by
+2027, CAGR 18% (HolonIQ, 2023).
+
+.10.2
+
+Business Model Canvas – Visual
+
+Figure: Visual Business Model Canvas – Sadeem Platform.
+
+ANNEX
+
+.11
+
+60
+
+Conclusion
+
+Sadeem presents a robust business model targeting a fast-growing market. The four
+pillars of its viability:
+• Real and urgent problem: no platform adapted to the Algerian context (Arabic
+RTL interface, local culture, DZD pricing, minors’ data compliance with Law n°1807).
+• Unique value proposition: the combination of Arabic RTL interface + Cody
+RAG + Arduino + DZD pricing cannot be found in any direct or indirect competitor.
+• Sound financial model: recurring revenue, break-even reachable at ≈340 subscribers, fixed AI inference cost (structural advantage at scale).
+• Regional expansion potential: consolidate in Algeria (Years1–2), then Maghreb
+(Tunisia, Morocco), then wider Arabic-speaking Middle East (Years3–5+).
+The Algeria Digital 2030 strategy and the Ministry of Knowledge Economy offer a
+high-multiplier B2G opportunity: a single institutional contract could bring Sadeem
+hundreds of thousands of users.
+
+

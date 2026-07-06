@@ -1,0 +1,76 @@
+version: "3.9"
+
+# ─── Sadeem LMS — Full Stack Docker Compose ────────────────────────────────────
+# Services:
+#   postgres  – local PostgreSQL (optional if using NeonDB)
+#   server    – Node.js / Express backend
+#   rag       – Python / FastAPI RAG chatbot
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sadeem_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sadeem}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sadeem_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-sadeem_lms}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sadeem}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Node.js Backend ─────────────────────────────────────────────────────────
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: sadeem_server
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    environment:
+      # Override DATABASE_URL to use the local postgres container.
+      # Comment this out if you want to keep using NeonDB cloud.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-sadeem}:${POSTGRES_PASSWORD:-sadeem_secret}@postgres:5432/${POSTGRES_DB:-sadeem_lms}
+      # RAG service URL inside Docker network
+      RAG_SERVICE_URL: http://rag:8000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rag:
+        condition: service_started
+    volumes:
+      - ./server/uploads:/app/uploads   # persist uploaded files
+    command: >
+      sh -c "npx prisma generate &&
+             npx prisma db push --skip-generate &&
+             npm run start"
+
+  # ── FastAPI RAG Service ─────────────────────────────────────────────────────
+  rag:
+    build:
+      context: ./Rag
+      dockerfile: Dockerfile
+    container_name: sadeem_rag
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - rag_chroma:/app/chroma_db   # persist ChromaDB vector store
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  postgres_data:
+  rag_chroma:

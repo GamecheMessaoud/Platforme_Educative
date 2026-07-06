@@ -1,0 +1,502 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password_hash  String
+  first_name     String
+  last_name      String
+  role           Role     @default(STUDENT)
+  language       String   @default("ar")
+  avatar_url     String?
+  is_active          Boolean   @default(true)
+  created_at         DateTime  @default(now())
+  reset_otp          String?
+  reset_otp_expires  DateTime?
+  google_id          String?   @unique
+  studentProfile Student?
+  teacherProfile Teacher?
+  parentProfile  Parent?
+  notifications  Notification[]
+  sentMessages   Message[]      @relation("SentMessages")
+  receivedMessages Message[]    @relation("ReceivedMessages")
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  user_id    String
+  type       String   // 'BADGE', 'COMMENT', 'SUBMISSION_REVIEWED', 'XP', 'LEVEL_UP', 'STREAK', 'REACTION'
+  title_ar   String
+  body_ar    String
+  icon       String   @default("🔔")
+  link       String?
+  is_read    Boolean  @default(false)
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Parent {
+  id             String    @id @default(uuid())
+  user_id        String    @unique
+  phone_number   String?
+  children       Student[]
+  user           User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+
+model Student {
+  id                String            @id @default(uuid())
+  user_id           String            @unique
+  date_of_birth     DateTime?
+  school_name       String?
+  skill_level           String            @default("BEGINNER")
+  placement_completed   Boolean           @default(false)
+  total_xp              Int               @default(0)
+  current_level         Int               @default(1)
+  current_streak    Int               @default(0)
+  longest_streak    Int               @default(0)
+  last_activity_at  DateTime          @default(now())
+  last_streak_update DateTime?         @default(now())
+  subscription_status String          @default("NONE") // NONE, ACTIVE, EXPIRED
+  subscription_end_date DateTime?
+  parent_id         String?
+  parent            Parent?           @relation(fields: [parent_id], references: [id], onDelete: SetNull)
+  enrollments       Enrollment[]
+  subscriptions     Subscription[]
+  exercise_attempts ExerciseAttempt[]
+  lesson_progress   LessonProgress[]
+  orders            Order[]
+  payments          Payment[]
+  quiz_attempts     QuizAttempt[]
+  submissions       Submission[]
+  xp_transactions   XpTransaction[]
+  badges            StudentBadge[]
+  user              User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  competitions      CompetitionParticipant[]
+  community_posts   CommunityPost[]
+  comments          Comment[]
+  reactions         Reaction[]
+}
+
+model Teacher {
+  id             String   @id @default(uuid())
+  user_id        String   @unique
+  bio            String?
+  specialization String?
+  courses        Course[]
+  competitions   Competition[]
+  user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name_fr String
+  name_ar String
+  name_en String?
+  slug    String   @unique
+  icon    String?
+  color   String?
+  courses Course[]
+}
+
+model Course {
+  id                  String       @id @default(uuid())
+  category_id         String
+  teacher_id          String
+  title_fr            String
+  title_ar            String
+  title_en            String?
+  description         String?
+  thumbnail_url       String?
+  difficulty          String       @default("BEGINNER")
+  level               Int          @default(1) // 1: Beginner, 2: Intermediate, 3: Advanced
+  xp_reward           Int          @default(100)
+  is_published        Boolean      @default(false)
+  created_at          DateTime     @default(now())
+  description_en      String?
+  description_fr      String?
+  estimated_duration  Int?         @default(60)
+  learning_objectives String?
+  category            Category     @relation(fields: [category_id], references: [id])
+  teacher             Teacher      @relation(fields: [teacher_id], references: [id])
+  enrollments         Enrollment[]
+  lessons             Lesson[]
+}
+
+model Lesson {
+  id            String           @id @default(uuid())
+  course_id     String
+  title_fr      String
+  title_ar      String
+  title_en      String?
+  content_fr    String?
+  content_ar    String?
+  content_en    String?
+  video_url     String?
+  lesson_type   String           @default("VIDEO")
+  difficulty    String           @default("BEGINNER") // BEGINNER, INTERMEDIATE, ADVANCED
+  level         Int              @default(1)
+  xp_reward     Int              @default(50)
+  order_index   Int              @default(0)
+  extra_qcm     Json?
+  guide_content String?
+  lab_url       String?
+  youtube_url   String?
+  pdf_url       String?
+  submission_url_example String?
+  exercises     Exercise[]
+  course        Course           @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  progress      LessonProgress[]
+  quizzes       Quiz[]
+  submissions   Submission[]
+}
+
+model Exercise {
+  id            String            @id @default(uuid())
+  lesson_id     String
+  title_fr      String
+  title_ar      String
+  title_en      String?
+  instructions  String?
+  exercise_type String            @default("CODE")
+  initial_code  String?
+  solution_code String?
+  test_cases    Json?
+  hints         Json?
+  xp_reward     Int               @default(20)
+  lesson        Lesson            @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  attempts      ExerciseAttempt[]
+}
+
+model ExerciseAttempt {
+  id             String   @id @default(uuid())
+  student_id     String
+  exercise_id    String
+  submitted_code String?
+  is_correct     Boolean  @default(false)
+  stars_earned   Int      @default(0)
+  xp_earned      Int      @default(0)
+  hints_used     Int      @default(0)
+  created_at     DateTime @default(now())
+  exercise       Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade)
+  student        Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model Quiz {
+  id             String        @id @default(uuid())
+  lesson_id      String
+  title_fr       String
+  title_ar       String
+  title_en       String?
+  xp_reward      Int           @default(30)
+  passing_score  Int           @default(70)
+  quiz_questions Json?
+  lesson         Lesson        @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  attempts       QuizAttempt[]
+}
+
+model QuizAttempt {
+  id         String   @id @default(uuid())
+  student_id String
+  quiz_id    String
+  score      Int      @default(0)
+  is_passed  Boolean  @default(false)
+  created_at DateTime @default(now())
+  quiz       Quiz     @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  student    Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model Enrollment {
+  id               String    @id @default(uuid())
+  student_id       String
+  course_id        String
+  status           String    @default("ACTIVE")
+  progress_percent Int       @default(0)
+  total_xp_earned  Int       @default(0)
+  started_at       DateTime  @default(now())
+  completed_at     DateTime?
+  course           Course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  student          Student   @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model LessonProgress {
+  id                 String    @id @default(uuid())
+  student_id         String
+  lesson_id          String
+  is_completed       Boolean   @default(false)
+  xp_earned          Int       @default(0)
+  time_spent_minutes Int       @default(0)
+  completed_at       DateTime?
+  lesson             Lesson    @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  student            Student   @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, lesson_id])
+}
+
+model Badge {
+  id             String         @id @default(uuid())
+  name_fr        String
+  name_ar        String
+  name_en        String?
+  description    String?
+  icon_url       String?
+  badge_type     String
+  requirement    Int
+  xp_bonus       Int            @default(50)
+  student_badges StudentBadge[]
+}
+
+model StudentBadge {
+  id         String   @id @default(uuid())
+  student_id String
+  badge_id   String
+  earned_at  DateTime @default(now())
+  badge      Badge    @relation(fields: [badge_id], references: [id], onDelete: Cascade)
+  student    Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model XpTransaction {
+  id         String   @id @default(uuid())
+  student_id String
+  amount     Int
+  source     String
+  source_id  String?
+  created_at DateTime @default(now())
+  student    Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model Level {
+  id           String  @id @default(uuid())
+  level_number Int     @unique
+  name_fr      String
+  name_ar      String
+  name_en      String?
+  xp_required  Int
+}
+
+model Submission {
+  id                 String    @id @default(uuid())
+  student_id         String
+  lesson_ref_id      Int
+  course_slug        String    @default("scratch")
+  file_name          String?
+  file_path          String?
+  file_size          Int?
+  file_type          String?
+  submission_url     String?   // External link (GitHub, Replit, YouTube, etc.)
+  submission_text    String?   // Raw text / code pasted by student
+  submission_type    String    @default("scratch-project")
+  description        String?
+  status             String    @default("pending")
+  professor_feedback String?
+  submitted_at       DateTime  @default(now())
+  reviewed_at        DateTime?
+  reviewed_by        String?
+  lesson_id          String?
+  lesson             Lesson?   @relation(fields: [lesson_id], references: [id])
+  student            Student   @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model StoreCategory {
+  id       String    @id @default(uuid())
+  name_ar  String
+  name_en  String?
+  slug     String    @unique
+  icon     String?
+  products Product[]
+}
+
+model Product {
+  id          String        @id @default(uuid())
+  category_id String
+  name_ar     String
+  name_en     String?
+  name_fr     String?
+  description String?
+  price       Float
+  image_url   String?
+  stock       Int           @default(0)
+  created_at  DateTime      @default(now())
+  order_items OrderItem[]
+  category    StoreCategory @relation(fields: [category_id], references: [id])
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  student_id       String
+  total_amount     Float
+  status           String      @default("PENDING")
+  payment_type     String      @default("COD")
+  delivery_address String?
+  phone_number     String?
+  created_at       DateTime    @default(now())
+  updated_at       DateTime    @updatedAt
+  baladia          String?
+  full_name        String?
+  shipping_fee     Float       @default(0)
+  wilaya           String?
+  student          Student     @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  items            OrderItem[]
+  payment          Payment?
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  order_id   String
+  product_id String
+  quantity   Int
+  price      Float
+  order      Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    Product @relation(fields: [product_id], references: [id])
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  order_id       String?  @unique
+  subscription_id String? @unique
+  student_id     String
+  amount         Float
+  currency       String   @default("DZD")
+  status         String   @default("COMPLETED")
+  payment_method String?
+  transaction_id String?  @unique
+  created_at     DateTime @default(now())
+  order          Order?   @relation(fields: [order_id], references: [id])
+  subscription   Subscription? @relation(fields: [subscription_id], references: [id])
+  student        Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+}
+
+model Subscription {
+  id             String   @id @default(uuid())
+  student_id     String
+  plan_type      String   // MONTHLY, YEARLY
+  status         String   @default("PENDING") // PENDING, ACTIVE, EXPIRED
+  start_date     DateTime?
+  end_date       DateTime?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  
+  student        Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  payment        Payment?
+}
+
+model DeliveryTariff {
+  id         String   @id @default(uuid())
+  wilaya_num String   @unique // e.g. "16", "31"
+  wilaya_ar  String
+  fee        Float    @default(600)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model SystemSetting {
+  key   String @id
+  value String
+}
+
+model Competition {
+  id              String   @id @default(uuid())
+  teacher_id      String
+  title_ar        String
+  title_en        String?
+  description_ar  String?
+  description_en  String?
+  image_url       String?
+  start_date      DateTime @default(now())
+  end_date        DateTime
+  status          String   @default("UPCOMING") // UPCOMING, ACTIVE, FINISHED
+  xp_reward       Int      @default(500)
+  created_at      DateTime @default(now())
+  teacher         Teacher  @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
+  participants    CompetitionParticipant[]
+}
+
+model CompetitionParticipant {
+  id             String      @id @default(uuid())
+  competition_id String
+  student_id     String
+  joined_at      DateTime    @default(now())
+  score          Int         @default(0)
+  rank           Int?
+  competition    Competition @relation(fields: [competition_id], references: [id], onDelete: Cascade)
+  student        Student     @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@unique([competition_id, student_id])
+}
+
+
+model CommunityPost {
+  id          String     @id @default(uuid())
+  author_id   String
+  type        PostType   @default(PROJECT) // PROJECT or QUESTION
+  title       String
+  content     String
+  media_url   String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  
+  author      Student    @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  reactions   Reaction[]
+}
+
+model Comment {
+  id          String        @id @default(uuid())
+  post_id     String
+  author_id   String
+  content     String
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  
+  post        CommunityPost @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  author      Student       @relation(fields: [author_id], references: [id], onDelete: Cascade)
+}
+
+model Reaction {
+  id          String        @id @default(uuid())
+  post_id     String
+  user_id     String
+  type        ReactionType  @default(LIKE)
+  
+  post        CommunityPost @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        Student       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+}
+
+enum PostType {
+  PROJECT
+  QUESTION
+}
+
+enum ReactionType {
+  LIKE
+  UPVOTE
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  PARENT
+  ADMIN
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  sender_id   String   
+  receiver_id String   
+  content     String
+  is_read     Boolean  @default(false)
+  created_at  DateTime @default(now())
+
+  sender      User     @relation("SentMessages", fields: [sender_id], references: [id], onDelete: Cascade)
+  receiver    User     @relation("ReceivedMessages", fields: [receiver_id], references: [id], onDelete: Cascade)
+}
+
