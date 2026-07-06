@@ -58,7 +58,7 @@ export default function Home() {
 
     const dashboardLink = user?.role === 'STUDENT' ? '/student-dashboard' :
                           user?.role === 'TEACHER' ? '/teacher-dashboard' :
-                          user?.role === 'PARENT' ? '/parent-dashboard' :
+                          (user?.role as string) === 'PARENT' ? '/parent-dashboard' :
                           user?.role === 'ADMIN' ? '/admin-dashboard' : '/courses';
 
     return (

@@ -9,8 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import NotificationBell from './NotificationBell';
 import GlobalSearch from './GlobalSearch';
 
-/* ═══════════════ ROLE COLOR CONFIGS ═══════════════ */
-export type DashboardRole = 'student' | 'teacher' | 'admin';
+export type DashboardRole = 'student' | 'teacher' | 'admin' | 'parent';
 
 interface RoleTheme {
     gradient: string;
@@ -64,6 +63,19 @@ const roleThemes: Record<DashboardRole, RoleTheme> = {
         badgeText: 'text-amber-400',
         portalLabel: 'ADMIN PANEL',
         portalEmoji: '🛡️',
+        logoIcon: Settings,
+    },
+    parent: {
+        gradient: 'from-blue-500 to-indigo-600',
+        gradientFrom: 'from-blue-600',
+        gradientTo: 'to-indigo-600',
+        accentText: 'text-blue-500',
+        accentBg: 'bg-blue-500',
+        shadow: 'shadow-blue-500/25',
+        badgeBg: 'bg-blue-500/10 border-blue-500/20',
+        badgeText: 'text-blue-400',
+        portalLabel: 'PARENT PORTAL',
+        portalEmoji: '👨‍👩‍👧',
         logoIcon: Settings,
     },
 };

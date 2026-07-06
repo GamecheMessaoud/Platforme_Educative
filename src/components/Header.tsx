@@ -186,7 +186,7 @@ export default function Header() {
                                         <Link 
                                             to={user.role === 'STUDENT' ? '/student-dashboard' :
                                                 user.role === 'TEACHER' ? '/teacher-dashboard' :
-                                                user.role === 'PARENT' ? '/parent-dashboard' :
+                                                (user.role as string) === 'PARENT' ? '/parent-dashboard' :
                                                 user.role === 'ADMIN' ? '/admin-dashboard' : '/'} 
                                             className="flex items-center gap-3 px-3 py-1 hover:bg-indigo-100/50 rounded-xl transition-colors cursor-pointer group"
                                         >

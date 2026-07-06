@@ -56,7 +56,7 @@ export default function ParentDashboard() {
     const muted = isDark ? 'text-slate-400' : 'text-slate-500';
 
     return (
-        <DashboardLayout>
+        <DashboardLayout role="parent" navItems={[]}>
             <div className="max-w-7xl mx-auto space-y-8 p-6">
                 
                 {/* Header Section */}

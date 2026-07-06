@@ -21,6 +21,7 @@ import {
     getDeliveryTariffs, upsertDeliveryTariff, deleteDeliveryTariff
 } from '../../services/storeService';
 import Loading from '../../components/Loading';
+import RagDocumentUploader from '../../components/dashboards/RagDocumentUploader';
 
 const slugify = (text: string) => text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
 
@@ -163,6 +164,34 @@ export default function AdminDashboard() {
         if (confirm('هل أنت متأكد من حذف هذا المستخدم نهائياً؟')) {
             await deleteAdminUser(id);
             loadData();
+        }
+    };
+
+    const handleApproveSubscription = async (id: string) => {
+        try {
+            await approveAdminSubscription(id);
+            loadData();
+        } catch (error) {
+            console.error('Error approving subscription:', error);
+        }
+    };
+
+    const handleUpdateSetting = async (key: string, value: string) => {
+        try {
+            await updateAdminSetting(key, value);
+            loadData();
+        } catch (error) {
+            console.error('Error updating setting:', error);
+        }
+    };
+
+    const handleDeleteCommunityPost = async (id: string) => {
+        if (!confirm('هل أنت متأكد من حذف هذا المنشور؟')) return;
+        try {
+            await api.delete(`/community/posts/${id}`);
+            loadData();
+        } catch (error) {
+            console.error('Error deleting post:', error);
         }
     };
 
@@ -341,7 +370,7 @@ export default function AdminDashboard() {
                                     {/* Chart 3: Platform Demographics (Pie Chart) */}
                                     <div className={`${cardBg} border rounded-[2.5rem] p-8 lg:col-span-2`}>
                                         <h3 className={`text-lg font-black text-white mb-6 flex items-center gap-2`}>
-                                            <PieChart className="text-amber-500" size={24} />توزيع المستخدمين والدورات
+                                            <Activity className="text-amber-500" size={24} />توزيع المستخدمين والدورات
                                         </h3>
                                         <div className="h-72 w-full flex flex-col md:flex-row items-center justify-center" dir="ltr">
                                             {stats ? (
@@ -359,7 +388,7 @@ export default function AdminDashboard() {
                                                             outerRadius={100}
                                                             paddingAngle={5}
                                                             dataKey="value"
-                                                            label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                                            label={({name, percent}) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                                                         >
                                                             <Cell fill="#3b82f6" />
                                                             <Cell fill="#10b981" />
