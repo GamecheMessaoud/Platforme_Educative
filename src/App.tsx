@@ -42,7 +42,7 @@ function App() {
   console.log("App component is rendering.");
   return (
     <ThemeProvider>
-      <BrowserRouter basename="/Platforme_Educative/">
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignIn />} />

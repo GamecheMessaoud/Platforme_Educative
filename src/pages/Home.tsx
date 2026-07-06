@@ -65,65 +65,193 @@ export default function Home() {
         <div className={`min-h-screen ${base} flex flex-col font-cairo dir-rtl text-right overflow-x-hidden selection:bg-primary/30`}>
             <Header />
 
-            {/* ══════ HERO (Stripe/Apple Style) ══════ */}
-            <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden">
-                {/* Minimalist Ambient Glows */}
-                <div className={`absolute top-1/4 left-1/4 w-[50vw] h-[50vw] rounded-full blur-[120px] -z-10 ${isDark ? 'bg-indigo-900/20' : 'bg-indigo-400/10'}`} />
-                <div className={`absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] rounded-full blur-[100px] -z-10 ${isDark ? 'bg-purple-900/20' : 'bg-purple-400/10'}`} />
+            {/* ══════ HERO — 2-Column Layout (matching screenshot) ══════ */}
+            <section ref={heroRef} className="relative min-h-[92vh] flex items-center pt-24 pb-16 overflow-hidden">
 
-                <div className="max-w-[1200px] mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-                    <motion.div style={{ y: yText, opacity: opacityText }} className="space-y-8 flex flex-col items-center">
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border ${isDark ? 'bg-slate-800/50 border-slate-700 text-indigo-300' : 'bg-white/50 border-indigo-100 text-indigo-600'}`}
+                {/* Ambient background glows */}
+                <div className="absolute top-[-10%] right-[-5%] w-[55vw] h-[55vw] rounded-full blur-[130px] -z-10 bg-purple-400/20" />
+                <div className="absolute bottom-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full blur-[110px] -z-10 bg-pink-400/15" />
+                <div className="absolute top-[30%] left-[30%] w-[30vw] h-[30vw] rounded-full blur-[100px] -z-10 bg-indigo-300/10" />
+
+                <div className="max-w-[1280px] mx-auto px-6 w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                        {/* ── RIGHT COLUMN: Text Content ── */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 40 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                            className="flex flex-col items-end text-right space-y-7 order-1 lg:order-2"
                         >
-                            <Sparkles size={16} />
-                            جيل جديد من العباقرة يُصنع الآن
+                            {/* Badge */}
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1, duration: 0.6 }}
+                                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border self-end ${isDark ? 'bg-slate-800/60 border-slate-700 text-purple-300' : 'bg-white/70 border-purple-100 text-purple-600 shadow-sm'}`}
+                            >
+                                <Sparkles size={15} className="text-yellow-500" />
+                                مستقبل البرمجة يبدأ من هنا
+                            </motion.div>
+
+                            {/* Main Heading */}
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.15, duration: 0.8, ease: 'easeOut' }}
+                                className="text-[3.2rem] md:text-[4.5rem] lg:text-[5.2rem] font-black leading-[1.08] tracking-tight"
+                            >
+                                ابن عالمك<br />بلمسة{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-l from-[#db2777] via-[#a855f7] to-[#7c3aed]">
+                                    إبداع وكود
+                                </span>
+                            </motion.h1>
+
+                            {/* Subtitle */}
+                            <motion.p
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.25, duration: 0.7 }}
+                                className={`text-lg md:text-xl font-semibold leading-relaxed max-w-lg ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+                            >
+                                المنصة التعليمية الأكثر ابتكاراً لتعليم الصغار لغات المستقبل بطريقة تجعلهم يعشقون التحدي.
+                            </motion.p>
+
+                            {/* CTA Buttons */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.35, duration: 0.7 }}
+                                className="flex flex-row-reverse flex-wrap gap-4 pt-2"
+                            >
+                                <Link
+                                    to={isAuthenticated ? dashboardLink : '/signup'}
+                                    className="flex items-center gap-2.5 px-8 py-4 bg-gradient-to-l from-[#7c3aed] to-[#a855f7] text-white rounded-2xl font-black text-base hover:scale-105 active:scale-95 transition-all shadow-xl shadow-purple-500/30"
+                                >
+                                    <ChevronRight size={18} />
+                                    {isAuthenticated ? 'لوحة القيادة' : 'بدء الرحلة المجانية'}
+                                </Link>
+                                <Link
+                                    to="/courses"
+                                    className={`flex items-center gap-2.5 px-8 py-4 rounded-2xl font-black text-base transition-all border ${isDark ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 shadow-sm'}`}
+                                >
+                                    <BookOpen size={18} />
+                                    اكتشاف المسارات
+                                </Link>
+                            </motion.div>
+
+                            {/* Stats Row */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5, duration: 0.7 }}
+                                className={`flex flex-row-reverse gap-8 pt-4 border-t w-full ${isDark ? 'border-slate-700/50' : 'border-slate-200/50'}`}
+                            >
+                                {[
+                                    { value: '+15', label: 'مسارات' },
+                                    { value: '+10k', label: 'طالب متميز' },
+                                    { value: '+50', label: 'درس تفاعلي' },
+                                ].map((stat) => (
+                                    <div key={stat.label} className="text-right">
+                                        <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-l from-[#7c3aed] to-[#db2777]">{stat.value}</div>
+                                        <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</div>
+                                    </div>
+                                ))}
+                            </motion.div>
                         </motion.div>
 
-                        <motion.h1 
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                            className="text-[4.5rem] md:text-[7rem] font-black leading-[1.05] tracking-tight"
+                        {/* ── LEFT COLUMN: Floating Code Editor Graphic ── */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -40, scale: 0.95 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                            className="relative flex items-center justify-center order-2 lg:order-1 py-10"
                         >
-                            برمجة المستقبل <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-l from-primary via-purple-500 to-secondary">بين يديك.</span>
-                        </motion.h1>
+                            {/* Main Editor Card */}
+                            <motion.div
+                                animate={{ y: [0, -12, 0] }}
+                                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                                className={`relative w-full max-w-[420px] rounded-[2.5rem] p-7 ${isDark ? 'bg-slate-800/80 border border-slate-700/60' : 'bg-white/80 border border-slate-100 shadow-2xl shadow-purple-200/40'} backdrop-blur-2xl`}
+                            >
+                                {/* macOS window dots */}
+                                <div className="flex gap-2 mb-6">
+                                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                                </div>
 
-                        <motion.p 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                            className={`text-2xl font-bold max-w-2xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
-                        >
-                            منصة سديم تمنح الصغار قوة بناء برمجيات وتطبيقات حقيقية بطريقة ممتعة، ذكية، ومبتكرة.
-                        </motion.p>
+                                {/* Colorful code lines */}
+                                <div className="space-y-3 pr-6">
+                                    {[
+                                        { color: 'from-violet-400 to-purple-500', w: 'w-[82%]', h: 'h-[14px]' },
+                                        { color: 'from-emerald-400 to-teal-500', w: 'w-[62%]', h: 'h-[14px]' },
+                                        { color: 'from-sky-400 to-blue-500', w: 'w-[72%]', h: 'h-[14px]' },
+                                        { color: 'from-amber-400 to-orange-400', w: 'w-[52%]', h: 'h-[14px]' },
+                                        { color: 'from-pink-400 to-rose-500', w: 'w-[67%]', h: 'h-[14px]' },
+                                        { color: 'from-violet-300 to-indigo-400', w: 'w-[78%]', h: 'h-[10px]' },
+                                        { color: 'from-teal-400 to-cyan-400', w: 'w-[55%]', h: 'h-[10px]' },
+                                    ].map((line, i) => (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.4 + i * 0.08, duration: 0.5 }}
+                                            className={`${line.h} ${line.w} rounded-full bg-gradient-to-r ${line.color} opacity-85`}
+                                        />
+                                    ))}
+                                </div>
 
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                            className="flex flex-col sm:flex-row gap-4 pt-8"
-                        >
-                            {isAuthenticated ? (
-                                <Link to={dashboardLink} className="px-10 py-5 bg-foreground text-background rounded-full font-black text-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-2xl">
-                                    العودة للوحة القيادة <ChevronRight size={20} />
-                                </Link>
-                            ) : (
-                                <Link to="/signup" className="px-10 py-5 bg-foreground text-background rounded-full font-black text-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-2xl">
-                                    ابدأ مجاناً الآن <ChevronRight size={20} />
-                                </Link>
-                            )}
-                            <Link to="/courses" className={`px-10 py-5 rounded-full font-black text-lg transition-all flex items-center justify-center gap-2 ${isDark ? 'bg-slate-800 hover:bg-slate-700 text-white' : 'bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 shadow-sm'}`}>
-                                تصفح المسارات
-                            </Link>
+                                {/* Line numbers on the right */}
+                                <div className="absolute right-5 top-[5rem] space-y-[13px]">
+                                    {[1,2,3,4,5,6,7].map(n => (
+                                        <div key={n} className={`text-[11px] font-mono leading-none ${isDark ? 'text-slate-600' : 'text-slate-300'}`}>{n}</div>
+                                    ))}
+                                </div>
+                            </motion.div>
+
+                            {/* Floating Badge — Top Right: XP System */}
+                            <motion.div
+                                animate={{ y: [0, -8, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+                                className={`absolute -top-2 -right-2 lg:-right-6 flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold shadow-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-purple-100 shadow-purple-100/50'}`}
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-lg">
+                                    ⭐
+                                </div>
+                                <div className="text-right">
+                                    <div className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>نظام XP</div>
+                                    <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>تعلم واربح الجوائز</div>
+                                </div>
+                            </motion.div>
+
+                            {/* Floating Badge — Bottom Left: Cody Assistant */}
+                            <motion.div
+                                animate={{ y: [0, 8, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                                className={`absolute -bottom-2 -left-2 lg:-left-6 flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold shadow-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-pink-100 shadow-pink-100/50'}`}
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center text-lg">
+                                    🤖
+                                </div>
+                                <div className="text-right">
+                                    <div className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>مساعد Cody</div>
+                                    <div className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>رفيقك في كل سطر كود</div>
+                                </div>
+                            </motion.div>
+
+                            {/* Decorative rotating rings */}
+                            <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                                className="absolute -bottom-8 right-10 w-6 h-6 rounded-full border-2 border-purple-400/30" />
+                            <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+                                className="absolute -top-8 left-10 w-5 h-5 rounded-full border-2 border-pink-400/30" />
+                            <div className="absolute bottom-4 left-4 w-3 h-3 rounded-full bg-amber-400/60" />
+                            <div className="absolute top-4 right-4 w-2.5 h-2.5 rounded-full bg-purple-400/50" />
                         </motion.div>
-                    </motion.div>
+
+                    </div>
                 </div>
             </section>
+
 
             {/* ══════ BENTO BOX UI (Features) ══════ */}
             <section className="py-32 relative z-20">
